@@ -1,0 +1,175 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "Chapter 2: Chinese Jack-Up Barges",
+    "description": "Three Chinese-built jack-up barges departed Guangzhou Shipyard, detected moving to Nansan Island",
+    "dateRange": "25 Feb 2025 - 13 Mar 2025"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "aoi-1",
+      "properties": {
+        "name": "Area of Interest 1",
+        "description": "Guangzhou Shipyard, Longxue Island - Departure Point",
+        "type": "area-of-interest",
+        "color": "#ffaa00",
+        "detectionDate": "2025-02-25T10:42:00Z"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [113.56, 22.77],
+          [113.73, 22.77],
+          [113.73, 22.63],
+          [113.56, 22.63],
+          [113.56, 22.77]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "aoi-2",
+      "properties": {
+        "name": "Area of Interest 2",
+        "description": "Nansan Island Beach - Artificial Dock Formation",
+        "type": "area-of-interest",
+        "color": "#ffaa00",
+        "detectionDate": "2025-02-28T02:50:00Z"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [110.59, 21.145],
+          [110.635, 21.145],
+          [110.635, 21.115],
+          [110.59, 21.115],
+          [110.59, 21.145]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "assessed-course",
+      "properties": {
+        "name": "Assessed Course",
+        "description": "Estimated route from Guangzhou Shipyard to Nansan Island - through water",
+        "type": "assessed-course",
+        "color": "#E8A0A0",
+        "style": "dashed",
+        "startDate": "2025-02-25",
+        "endDate": "2025-02-28"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [113.645, 22.705],
+          [113.68, 22.60],
+          [113.75, 22.45],
+          [113.80, 22.25],
+          [113.75, 22.00],
+          [113.60, 21.80],
+          [113.35, 21.65],
+          [113.00, 21.55],
+          [112.60, 21.50],
+          [112.20, 21.45],
+          [111.80, 21.40],
+          [111.40, 21.32],
+          [111.00, 21.25],
+          [110.75, 21.18],
+          [110.60, 21.13]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "detection-1-guangzhou",
+      "properties": {
+        "name": "Unattributed Detection 1",
+        "type": "unattributed-detection",
+        "lat": 22.7095,
+        "lon": 113.6455,
+        "date": "2025-02-27T10:42:00Z"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [113.6455, 22.7095]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "detection-2-guangzhou",
+      "properties": {
+        "name": "Unattributed Detection 2",
+        "type": "unattributed-detection",
+        "lat": 22.7042,
+        "lon": 113.6419,
+        "date": "2025-02-27T10:42:00Z"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [113.6419, 22.7042]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "detection-3-nansan",
+      "properties": {
+        "name": "Detection Point 1 - Nansan",
+        "type": "unattributed-detection",
+        "lat": 21.1348,
+        "lon": 110.5930,
+        "date": "2025-02-28T02:50:00Z"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [110.5930, 21.1348]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "detection-4-nansan",
+      "properties": {
+        "name": "Detection Point 2 - Nansan",
+        "type": "unattributed-detection",
+        "lat": 21.1307,
+        "lon": 110.6037,
+        "date": "2025-02-28T02:50:00Z"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [110.6037, 21.1307]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "detection-5-nansan",
+      "properties": {
+        "name": "Detection Point 3 - Nansan",
+        "type": "unattributed-detection",
+        "lat": 21.1283,
+        "lon": 110.6119,
+        "date": "2025-02-28T02:50:00Z"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [110.6119, 21.1283]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "detection-6-nansan",
+      "properties": {
+        "name": "Detection Point 4 - Nansan",
+        "type": "unattributed-detection",
+        "lat": 21.1255,
+        "lon": 110.6200,
+        "date": "2025-02-28T02:50:00Z"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [110.6200, 21.1255]
+      }
+    }
+  ]
+}
