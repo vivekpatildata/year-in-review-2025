@@ -321,6 +321,30 @@ function animateChapter11(map, chapterConfig) {
                 box-shadow: none !important;
             }
 
+            /* === IMAGE NUMBER BADGE — bottom-right overlay === */
+            .ch11-img-badge {
+                position: absolute;
+                bottom: 6px;
+                right: 6px;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: rgba(0, 20, 40, 0.85);
+                border: 1.5px solid ${CONFIG.NUMBER_BORDER_COLOR};
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'JetBrains Mono', 'Inter', monospace;
+                font-size: 11px;
+                font-weight: 700;
+                color: ${CONFIG.NUMBER_BORDER_COLOR};
+                z-index: 10;
+                box-shadow:
+                    0 0 8px ${CONFIG.NUMBER_GLOW_COLOR},
+                    0 2px 4px rgba(0, 0, 0, 0.5);
+                pointer-events: none;
+            }
+
             /* Orange glow for transmission change */
             .ch11-sat-img.orange {
                 box-shadow:
@@ -765,6 +789,11 @@ function animateChapter11(map, chapterConfig) {
                     height: 24px;
                     font-size: 12px;
                 }
+                .ch11-img-badge {
+                    width: 20px;
+                    height: 20px;
+                    font-size: 10px;
+                }
                 .ch11-trans-annotation-content {
                     min-width: 240px;
                     max-width: 280px;
@@ -823,6 +852,13 @@ function animateChapter11(map, chapterConfig) {
                     width: 22px;
                     height: 22px;
                     font-size: 11px;
+                }
+                .ch11-img-badge {
+                    width: 18px;
+                    height: 18px;
+                    font-size: 9px;
+                    bottom: 4px;
+                    right: 4px;
                 }
                 .ch11-vessel-panel {
                     top: 80px;
@@ -918,6 +954,13 @@ function animateChapter11(map, chapterConfig) {
                     width: 20px;
                     height: 20px;
                     font-size: 10px;
+                }
+                .ch11-img-badge {
+                    width: 16px;
+                    height: 16px;
+                    font-size: 8px;
+                    bottom: 3px;
+                    right: 3px;
                 }
                 .ch11-vessel-panel {
                     top: 70px;
@@ -1202,8 +1245,9 @@ function animateChapter11(map, chapterConfig) {
         }
     }
 
-    function createImagePopup(lngLat, imagePath, colorType, offset, label, sublabel) {
+    function createImagePopup(lngLat, imagePath, colorType, offset, label, sublabel, number) {
         const uniqueId = `ph-${Date.now()}-${Math.random().toString(36).substr(2,5)}`;
+        const badgeHtml = number ? `<div class="ch11-img-badge">${number}</div>` : '';
         const popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false,
@@ -1216,10 +1260,13 @@ function animateChapter11(map, chapterConfig) {
                     <span class="ch11-popup-label">${label}</span>
                     <span class="ch11-popup-sublabel">${sublabel || 'SAT IMAGE'}</span>
                 </div>
-                <img class="ch11-sat-img ${colorType}" src="${imagePath}"
-                     style="display:none;"
-                     onload="this.style.display='block'; this.previousElementSibling.style.display='none';"
-                     onerror="this.style.display='none';">
+                <div style="position:relative; display:inline-block;">
+                    ${badgeHtml}
+                    <img class="ch11-sat-img ${colorType}" src="${imagePath}"
+                         style="display:none;"
+                         onload="this.style.display='block'; this.parentElement.previousElementSibling.style.display='none';"
+                         onerror="this.style.display='none';">
+                </div>
             `)
             .addTo(map);
         popups.push(popup);
@@ -1249,7 +1296,8 @@ function animateChapter11(map, chapterConfig) {
     }
 
     // STS image popup with white tint glow holder (attention grabbing)
-    function createStsImagePopup(lngLat, imagePath, offset, label, sublabel) {
+    function createStsImagePopup(lngLat, imagePath, offset, label, sublabel, number) {
+        const badgeHtml = number ? `<div class="ch11-img-badge">${number}</div>` : '';
         const popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false,
@@ -1258,7 +1306,8 @@ function animateChapter11(map, chapterConfig) {
         })
             .setLngLat(lngLat)
             .setHTML(`
-                <div class="ch11-sts-img-holder">
+                <div class="ch11-sts-img-holder" style="position:relative;">
+                    ${badgeHtml}
                     <img src="${imagePath}" alt="${sublabel}" onerror="this.parentElement.style.display='none';">
                 </div>
             `)
@@ -1658,7 +1707,8 @@ function animateChapter11(map, chapterConfig) {
             'red',
             CONFIG.DET_1_OFFSET,
             CONFIG.DET_1_LABEL,
-            CONFIG.DET_1_SUBLABEL
+            CONFIG.DET_1_SUBLABEL,
+            1
         );
 
         safeSetTimeout(() => {
@@ -1680,7 +1730,8 @@ function animateChapter11(map, chapterConfig) {
             'blue',
             CONFIG.DET_2_OFFSET,
             CONFIG.DET_2_LABEL,
-            CONFIG.DET_2_SUBLABEL
+            CONFIG.DET_2_SUBLABEL,
+            2
         );
 
         safeSetTimeout(() => {
@@ -1703,7 +1754,8 @@ function animateChapter11(map, chapterConfig) {
             CONFIG.DET_3_IMAGE,
             CONFIG.DET_3_OFFSET,
             CONFIG.DET_3_LABEL,
-            CONFIG.DET_3_SUBLABEL
+            CONFIG.DET_3_SUBLABEL,
+            3
         );
 
         safeSetTimeout(() => {
@@ -1725,7 +1777,8 @@ function animateChapter11(map, chapterConfig) {
             'blue',
             CONFIG.DET_4_OFFSET,
             CONFIG.DET_4_LABEL,
-            CONFIG.DET_4_SUBLABEL
+            CONFIG.DET_4_SUBLABEL,
+            4
         );
 
         safeSetTimeout(() => {
@@ -1795,7 +1848,8 @@ function animateChapter11(map, chapterConfig) {
             'blue',
             CONFIG.DET_5_OFFSET,
             CONFIG.DET_5_LABEL,
-            CONFIG.DET_5_SUBLABEL
+            CONFIG.DET_5_SUBLABEL,
+            5
         );
 
         safeSetTimeout(() => {

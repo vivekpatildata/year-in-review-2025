@@ -60,7 +60,7 @@ function animateChapter12(map, chapterConfig) {
         // Detection 4: Heading east from STS - 08 Dec 2025 (AIS dark)
         DET_4: [-68.1134, 11.4955],
         DET_4_IMAGE: 'images/chapter12/chapter12D.png',
-        DET_4_OFFSET: [100, -70],
+        DET_4_OFFSET: [110, -70],
         DET_4_LABEL: '08 Dec 2025 15:31 UTC',
         DET_4_SUBLABEL: 'SKIPPER (AIS dark) heading east from STS',
 
@@ -212,6 +212,30 @@ function animateChapter12(map, chapterConfig) {
                 box-shadow: none !important;
                 border: none !important;
                 outline: none !important;
+            }
+
+            /* === IMAGE NUMBER BADGE — bottom-right overlay === */
+            .ch12-img-badge {
+                position: absolute;
+                bottom: 6px;
+                right: 6px;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: rgba(0, 20, 40, 0.85);
+                border: 1.5px solid #00ff88;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'JetBrains Mono', 'Inter', monospace;
+                font-size: 11px;
+                font-weight: 700;
+                color: #00ff88;
+                z-index: 10;
+                box-shadow:
+                    0 0 8px rgba(0, 255, 136, 0.4),
+                    0 2px 4px rgba(0, 0, 0, 0.5);
+                pointer-events: none;
             }
 
             /* === SATELLITE IMAGES (Direct - No Container) === */
@@ -459,6 +483,11 @@ function animateChapter12(map, chapterConfig) {
                     height: 24px;
                     font-size: 12px;
                 }
+                .ch12-img-badge {
+                    width: 20px;
+                    height: 20px;
+                    font-size: 10px;
+                }
             }
 
             /* === RESPONSIVE - MOBILE === */
@@ -487,6 +516,13 @@ function animateChapter12(map, chapterConfig) {
                     width: 22px;
                     height: 22px;
                     font-size: 11px;
+                }
+                .ch12-img-badge {
+                    width: 18px;
+                    height: 18px;
+                    font-size: 9px;
+                    bottom: 4px;
+                    right: 4px;
                 }
                 .ch12-vessel-latest {
                     top: 80px;
@@ -529,6 +565,13 @@ function animateChapter12(map, chapterConfig) {
                     width: 20px;
                     height: 20px;
                     font-size: 10px;
+                }
+                .ch12-img-badge {
+                    width: 16px;
+                    height: 16px;
+                    font-size: 8px;
+                    bottom: 3px;
+                    right: 3px;
                 }
                 .ch12-vessel-latest {
                     top: 70px;
@@ -697,8 +740,9 @@ function animateChapter12(map, chapterConfig) {
         }
     }
 
-    function createImagePopup(lngLat, imagePath, colorType, offset, label, sublabel) {
+    function createImagePopup(lngLat, imagePath, colorType, offset, label, sublabel, number) {
         const uniqueId = `ph-${Date.now()}-${Math.random().toString(36).substr(2,5)}`;
+        const badgeHtml = number ? `<div class="ch12-img-badge">${number}</div>` : '';
         const popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false,
@@ -711,10 +755,13 @@ function animateChapter12(map, chapterConfig) {
                     <span class="ch12-popup-label">${label}</span>
                     <span class="ch12-popup-sublabel">${sublabel || 'SAT IMAGE'}</span>
                 </div>
-                <img class="ch12-sat-img ${colorType}" src="${imagePath}"
-                     style="display:none;"
-                     onload="this.style.display='block'; this.previousElementSibling.style.display='none';"
-                     onerror="this.style.display='none';">
+                <div style="position:relative; display:inline-block;">
+                    ${badgeHtml}
+                    <img class="ch12-sat-img ${colorType}" src="${imagePath}"
+                         style="display:none;"
+                         onload="this.style.display='block'; this.parentElement.previousElementSibling.style.display='none';"
+                         onerror="this.style.display='none';">
+                </div>
             `)
             .addTo(map);
         popups.push(popup);
@@ -1013,7 +1060,8 @@ function animateChapter12(map, chapterConfig) {
             'red',
             CONFIG.DET_1_OFFSET,
             CONFIG.DET_1_LABEL,
-            CONFIG.DET_1_SUBLABEL
+            CONFIG.DET_1_SUBLABEL,
+            1
         );
 
         safeSetTimeout(() => {
@@ -1039,7 +1087,8 @@ function animateChapter12(map, chapterConfig) {
             'red',
             CONFIG.DET_2_OFFSET,
             CONFIG.DET_2_LABEL,
-            CONFIG.DET_2_SUBLABEL
+            CONFIG.DET_2_SUBLABEL,
+            2
         );
 
         safeSetTimeout(() => {
@@ -1065,7 +1114,8 @@ function animateChapter12(map, chapterConfig) {
             'cyan',
             CONFIG.DET_3_OFFSET,
             CONFIG.DET_3_LABEL,
-            CONFIG.DET_3_SUBLABEL
+            CONFIG.DET_3_SUBLABEL,
+            3
         );
 
         safeSetTimeout(() => {
@@ -1091,7 +1141,8 @@ function animateChapter12(map, chapterConfig) {
             'red',
             CONFIG.DET_4_OFFSET,
             CONFIG.DET_4_LABEL,
-            CONFIG.DET_4_SUBLABEL
+            CONFIG.DET_4_SUBLABEL,
+            4
         );
 
         safeSetTimeout(() => {

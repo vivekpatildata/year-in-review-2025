@@ -91,7 +91,7 @@ function animateChapter4(map, chapterConfig) {
         MOZAMBIQUE_IMAGE: 'images/chapter4/chapter4C.png',
         MOZAMBIQUE_IMG_WIDTH: 220,
         MOZAMBIQUE_IMG_HEIGHT: 180,
-        MOZAMBIQUE_IMG_OFFSET: [0, -50],  // [x, y] offset - ADJUST AS NEEDED
+        MOZAMBIQUE_IMG_OFFSET: [-50, -50],  // [x, y] offset - ADJUST AS NEEDED
     };
 
     // ============================================================================
@@ -962,7 +962,7 @@ function animateChapter4(map, chapterConfig) {
             </div>
         `;
         originMarker = new mapboxgl.Marker({ element: originEl, anchor: 'bottom' })
-            .setLngLat(DARK_DETECTION_1.COORDS)  // [52.5571, 27.5303] - Asalouyeh Port
+            .setLngLat([51.90, 27.25])  // Further west into the Persian Gulf waters off Asalouyeh
             .addTo(map);
 
         // Start animation from mainEndIndex

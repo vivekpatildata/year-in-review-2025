@@ -92,7 +92,7 @@
    const MAPBOX_TOKEN = 'pk.eyJ1Ijoidml2ZWtwYXRpbDE3IiwiYSI6ImNtOTBhc2E1ZTA1cTEyanBxaWJ0M2NkOTcifQ.hkIZBo-Qa-U651UubO87fw';
    
    // Map style
-   const MAP_STYLE = 'mapbox://styles/vivekpatil17/cmk2wc0ze007701s58d7q9kgl';
+   const MAP_STYLE = 'mapbox://styles/vivekpatil17/cmlfm4wke005101ql8ss514dh';
    
    // Initial map view
    const INITIAL_VIEW = {
@@ -469,10 +469,10 @@
            region: 'Arabian Sea to East Africa',
            dateRange: { start: 'MAY 21, 2025', end: 'JUL 07, 2025' },
            camera: {
-               center: [30.73, -0.39],
-               zoom: 3.02,
-               pitch: 4,
-               bearing: -34.4,
+               center: [21.61, 10],
+               zoom: 2.91,
+               pitch: 0,
+               bearing: 0,
                duration: 2000
            },
            scrollType: 'vertical',
@@ -508,9 +508,9 @@
            hideChapterInfo: true,
            camera: {
                center: [16.03, 57.46],
-               zoom: 4.3,
+               zoom: 4.1,
                pitch: 0,
-               bearing: -28.8,
+               bearing: -10,
                duration: 2500
            },
            scrollType: 'vertical',
@@ -2240,6 +2240,26 @@
        if (!STATE.miniMap || !STATE.miniMarker) return;
        
        try {
+           // Special handling for june: place marker in center of Red Sea
+           if (STATE.currentChapter === 'june') {
+               STATE.miniMarker.setLngLat([39.5, 16.5]);  // Center of Red Sea
+               STATE.miniMap.jumpTo({
+                   center: [39.5, 16.5],
+                   zoom: 2.5
+               });
+               return;
+           }
+           
+           // Special handling for april-h1: show full Iran-to-Mozambique corridor
+           if (STATE.currentChapter === 'april-h1') {
+               STATE.miniMarker.setLngLat([34.82, -19.87]);  // Marker at Beira, Mozambique
+               STATE.miniMap.jumpTo({
+                   center: [46, 5],       // Centered on Indian Ocean — shows Gulf of Oman + Mozambique
+                   zoom: 0.5              // Zoomed out to show full corridor
+               });
+               return;
+           }
+           
            const [lng, lat] = coordinates;
            
            // Update marker position
@@ -3336,6 +3356,8 @@
        // Map move sync with mini map
        if (STATE.map) {
            STATE.map.on('move', () => {
+               // Skip move sync for chapters with custom mini-map positions
+               if (STATE.currentChapter === 'april-h1' || STATE.currentChapter === 'june') return;
                const center = STATE.map.getCenter();
                updateMiniMapMarker([center.lng, center.lat]);
            });

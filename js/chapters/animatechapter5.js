@@ -49,7 +49,7 @@ function animateChapter5(map, chapterConfig) {
     const LIGHT_DET = {
         COORDS: [14.5427, 55.3255],       // [lng, lat] - Baltic Sea
         IMAGE: 'images/chapter5/chapter5A.png',
-        IMG_WIDTH: 200,
+        IMG_WIDTH: 180,
         IMG_OFFSET: [0, 230],              // INDEPENDENT - adjust as needed
     };
 
@@ -64,7 +64,7 @@ function animateChapter5(map, chapterConfig) {
         COORDS: [28.4296, 59.8162],       // [lng, lat] - Luga Bay, Russia
         IMAGE: 'images/chapter5/chapter5B.png',
         IMG_WIDTH: 180,
-        IMG_OFFSET: [29, -22],            // INDEPENDENT - adjust as needed
+        IMG_OFFSET: [50, -20],            // INDEPENDENT - adjust as needed
     };
 
     // MARKER 4: Unattributed Detection (Ust-Luga)
@@ -79,8 +79,8 @@ function animateChapter5(map, chapterConfig) {
     const LIGHT_DET_FINAL = {
         COORDS: [11.4556, 56.3483],       // [lng, lat] - Return journey
         IMAGE: 'images/chapter5/chapter5D.png',
-        IMG_WIDTH: 200,
-        IMG_OFFSET: [140, 0],             // INDEPENDENT - adjust as needed
+        IMG_WIDTH: 180,
+        IMG_OFFSET: [110, 0],             // INDEPENDENT - adjust as needed
     };
 
     // ============================================================================
@@ -264,31 +264,39 @@ function animateChapter5(map, chapterConfig) {
             .ch5-light-img-holder {
                 display: inline-block;
                 padding: 0 !important;
-                border-radius: 10px;
-                background: transparent !important;
+                margin: 0 !important;
+                border-radius: 4px;
+                background: none !important;
+                background-color: transparent !important;
                 border: none !important;
                 outline: none !important;
+                overflow: hidden;
                 box-shadow:
                     0 0 25px rgba(0, 163, 227, 0.35),
                     0 0 50px rgba(0, 163, 227, 0.15);
             }
             .ch5-light-img {
                 display: block;
-                max-width: ${LIGHT_DET.IMG_WIDTH}px;
+                width: ${LIGHT_DET.IMG_WIDTH}px;
                 height: auto;
-                border-radius: 6px;
+                border-radius: 0 !important;
                 border: none !important;
                 outline: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             /* === DARK DETECTION IMAGE (Orange + White Tint Glow) - ATTENTION === */
             .ch5-dark-img-holder {
                 display: inline-block;
                 padding: 0 !important;
-                border-radius: 10px;
-                background: transparent !important;
+                margin: 0 !important;
+                border-radius: 4px;
+                background: none !important;
+                background-color: transparent !important;
                 border: none !important;
                 outline: none !important;
+                overflow: hidden;
                 box-shadow:
                     0 0 15px rgba(255, 255, 255, 0.5),
                     0 0 30px rgba(255, 200, 100, 0.4),
@@ -311,21 +319,26 @@ function animateChapter5(map, chapterConfig) {
             }
             .ch5-dark-img {
                 display: block;
-                max-width: ${DARK_DET.IMG_WIDTH}px;
+                width: ${DARK_DET.IMG_WIDTH}px;
                 height: auto;
-                border-radius: 6px;
+                border-radius: 0 !important;
                 border: none !important;
                 outline: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             /* === UNATTRIBUTED IMAGE (Red + White Tint Glow) - ATTENTION === */
             .ch5-unattr-img-holder {
                 display: inline-block;
                 padding: 0 !important;
-                border-radius: 10px;
-                background: transparent !important;
+                margin: 0 !important;
+                border-radius: 4px;
+                background: none !important;
+                background-color: transparent !important;
                 border: none !important;
                 outline: none !important;
+                overflow: hidden;
                 box-shadow:
                     0 0 15px rgba(255, 255, 255, 0.5),
                     0 0 30px rgba(255, 150, 150, 0.4),
@@ -348,32 +361,39 @@ function animateChapter5(map, chapterConfig) {
             }
             .ch5-unattr-img {
                 display: block;
-                max-width: ${UNATTR_DET.IMG_WIDTH}px;
+                width: ${UNATTR_DET.IMG_WIDTH}px;
                 height: auto;
-                border-radius: 6px;
+                border-radius: 0 !important;
                 border: none !important;
                 outline: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             /* === FINAL LIGHT DETECTION IMAGE (Blue Glow) - INDEPENDENT === */
             .ch5-light-final-img-holder {
                 display: inline-block;
                 padding: 0 !important;
-                border-radius: 10px;
-                background: transparent !important;
+                margin: 0 !important;
+                border-radius: 4px;
+                background: none !important;
+                background-color: transparent !important;
                 border: none !important;
                 outline: none !important;
+                overflow: hidden;
                 box-shadow:
                     0 0 25px rgba(0, 163, 227, 0.35),
                     0 0 50px rgba(0, 163, 227, 0.15);
             }
             .ch5-light-final-img {
                 display: block;
-                max-width: ${LIGHT_DET_FINAL.IMG_WIDTH}px;
+                width: ${LIGHT_DET_FINAL.IMG_WIDTH}px;
                 height: auto;
-                border-radius: 6px;
+                border-radius: 0 !important;
                 border: none !important;
                 outline: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             /* === RESPONSIVE - TABLET === */

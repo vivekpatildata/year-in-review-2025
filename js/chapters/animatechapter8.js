@@ -213,24 +213,53 @@ function animateChapter8(map, chapterConfig) {
 
             /* === SATELLITE IMAGE (Blue Glow) === */
             .ch8-img-holder {
+                position: relative;
                 display: inline-block;
                 padding: 0 !important;
-                border-radius: 10px;
-                background: transparent !important;
+                margin: 0 !important;
+                border-radius: 4px;
+                background: none !important;
                 border: none !important;
                 outline: none !important;
+                overflow: hidden;
                 box-shadow:
                     0 0 25px rgba(0, 163, 227, 0.35),
                     0 0 50px rgba(0, 163, 227, 0.15);
             }
             .ch8-sat-img {
                 display: block;
-                max-width: 180px;
+                width: 180px;
                 height: auto;
-                border-radius: 6px;
+                border-radius: 0 !important;
                 border: none !important;
                 outline: none !important;
                 box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* === IMAGE NUMBER BADGE — bottom-right overlay === */
+            .ch8-img-badge {
+                position: absolute;
+                bottom: 6px;
+                right: 6px;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: rgba(0, 20, 40, 0.85);
+                border: 1.5px solid #00a3e3;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'JetBrains Mono', 'Inter', monospace;
+                font-size: 11px;
+                font-weight: 700;
+                color: #00d4ff;
+                z-index: 10;
+                box-shadow:
+                    0 0 8px rgba(0, 163, 227, 0.6),
+                    0 2px 4px rgba(0, 0, 0, 0.5);
+                pointer-events: none;
             }
 
             /* === RESPONSIVE - TABLET === */
@@ -239,12 +268,17 @@ function animateChapter8(map, chapterConfig) {
                     width: ${Math.round(CONFIG.LIGHT_MARKER_SIZE * 0.9)}px;
                 }
                 .ch8-sat-img {
-                    max-width: 160px;
+                    width: 160px;
                 }
                 .ch8-number-marker {
                     width: 24px;
                     height: 24px;
                     font-size: 12px;
+                }
+                .ch8-img-badge {
+                    width: 20px;
+                    height: 20px;
+                    font-size: 10px;
                 }
             }
 
@@ -276,12 +310,19 @@ function animateChapter8(map, chapterConfig) {
                     width: ${Math.round(CONFIG.LIGHT_MARKER_SIZE * 0.8)}px;
                 }
                 .ch8-sat-img {
-                    max-width: 140px;
+                    width: 140px;
                 }
                 .ch8-number-marker {
                     width: 22px;
                     height: 22px;
                     font-size: 11px;
+                }
+                .ch8-img-badge {
+                    width: 18px;
+                    height: 18px;
+                    font-size: 9px;
+                    bottom: 4px;
+                    right: 4px;
                 }
                 .ch8-territory-label {
                     font-size: 10px;
@@ -295,7 +336,7 @@ function animateChapter8(map, chapterConfig) {
                     width: ${Math.round(CONFIG.LIGHT_MARKER_SIZE * 0.7)}px;
                 }
                 .ch8-sat-img {
-                    max-width: 110px;
+                    width: 110px;
                 }
                 .ch8-vessel {
                     width: ${Math.round(CONFIG.VESSEL_SIZE * 0.8)}px;
@@ -305,6 +346,13 @@ function animateChapter8(map, chapterConfig) {
                     width: 20px;
                     height: 20px;
                     font-size: 10px;
+                }
+                .ch8-img-badge {
+                    width: 16px;
+                    height: 16px;
+                    font-size: 8px;
+                    bottom: 3px;
+                    right: 3px;
                 }
                 .ch8-territory-label {
                     font-size: 9px;
@@ -416,8 +464,8 @@ function animateChapter8(map, chapterConfig) {
             .addTo(map);
     }
 
-    // Create satellite image popup
-    function createSatPopup(markerConfig) {
+    // Create satellite image popup with number badge
+    function createSatPopup(markerConfig, number) {
         return new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false,
@@ -427,6 +475,7 @@ function animateChapter8(map, chapterConfig) {
             .setLngLat(markerConfig.COORDS)
             .setHTML(`
                 <div class="ch8-img-holder">
+                    <div class="ch8-img-badge">${number}</div>
                     <img class="ch8-sat-img" src="${markerConfig.IMAGE}"
                          onerror="this.parentElement.style.display='none';">
                 </div>
@@ -582,7 +631,7 @@ function animateChapter8(map, chapterConfig) {
                     .setLngLat(MARKER_1.COORDS)
                     .addTo(map);
                 numMkr1 = createNumberMarker('1', MARKER_1.COORDS, [35, -35]);  // Diagonally right of marker
-                popup1 = createSatPopup(MARKER_1);
+                popup1 = createSatPopup(MARKER_1, 1);
                 popup1.addTo(map);
             }
 
@@ -593,7 +642,7 @@ function animateChapter8(map, chapterConfig) {
                     .setLngLat(MARKER_2.COORDS)
                     .addTo(map);
                 numMkr2 = createNumberMarker('2', MARKER_2.COORDS);
-                popup2 = createSatPopup(MARKER_2);
+                popup2 = createSatPopup(MARKER_2, 2);
                 popup2.addTo(map);
             }
 
@@ -604,7 +653,7 @@ function animateChapter8(map, chapterConfig) {
                     .setLngLat(MARKER_3.COORDS)
                     .addTo(map);
                 numMkr3 = createNumberMarker('3', MARKER_3.COORDS, [35, 0]);  // Right of marker
-                popup3 = createSatPopup(MARKER_3);
+                popup3 = createSatPopup(MARKER_3, 3);
                 popup3.addTo(map);
             }
 
@@ -615,7 +664,7 @@ function animateChapter8(map, chapterConfig) {
                     .setLngLat(MARKER_4.COORDS)
                     .addTo(map);
                 numMkr4 = createNumberMarker('4', MARKER_4.COORDS);
-                popup4 = createSatPopup(MARKER_4);
+                popup4 = createSatPopup(MARKER_4, 4);
                 popup4.addTo(map);
             }
 
@@ -626,7 +675,7 @@ function animateChapter8(map, chapterConfig) {
                     .setLngLat(MARKER_5.COORDS)
                     .addTo(map);
                 numMkr5 = createNumberMarker('5', MARKER_5.COORDS, [0, 35]);  // Below marker
-                popup5 = createSatPopup(MARKER_5);
+                popup5 = createSatPopup(MARKER_5, 5);
                 popup5.addTo(map);
             }
 
@@ -637,7 +686,7 @@ function animateChapter8(map, chapterConfig) {
                     .setLngLat(MARKER_6.COORDS)
                     .addTo(map);
                 numMkr6 = createNumberMarker('6', MARKER_6.COORDS);
-                popup6 = createSatPopup(MARKER_6);
+                popup6 = createSatPopup(MARKER_6, 6);
                 popup6.addTo(map);
             }
         }
@@ -657,8 +706,8 @@ function animateChapter8(map, chapterConfig) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
                 marker1 = new mapboxgl.Marker({ element: el, anchor: 'center' })
                     .setLngLat(MARKER_1.COORDS).addTo(map);
-                numMkr1 = createNumberMarker('1', MARKER_1.COORDS, [35, -35]);  // Diagonally right of marker
-                popup1 = createSatPopup(MARKER_1);
+                numMkr1 = createNumberMarker('1', MARKER_1.COORDS, [35, -35]);
+                popup1 = createSatPopup(MARKER_1, 1);
                 popup1.addTo(map);
             }
             if (!marker2) {
@@ -666,15 +715,15 @@ function animateChapter8(map, chapterConfig) {
                 marker2 = new mapboxgl.Marker({ element: el, anchor: 'center' })
                     .setLngLat(MARKER_2.COORDS).addTo(map);
                 numMkr2 = createNumberMarker('2', MARKER_2.COORDS);
-                popup2 = createSatPopup(MARKER_2);
+                popup2 = createSatPopup(MARKER_2, 2);
                 popup2.addTo(map);
             }
             if (!marker3) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
                 marker3 = new mapboxgl.Marker({ element: el, anchor: 'center' })
                     .setLngLat(MARKER_3.COORDS).addTo(map);
-                numMkr3 = createNumberMarker('3', MARKER_3.COORDS, [35, 0]);  // Right of marker
-                popup3 = createSatPopup(MARKER_3);
+                numMkr3 = createNumberMarker('3', MARKER_3.COORDS, [35, 0]);
+                popup3 = createSatPopup(MARKER_3, 3);
                 popup3.addTo(map);
             }
             if (!marker4) {
@@ -682,15 +731,15 @@ function animateChapter8(map, chapterConfig) {
                 marker4 = new mapboxgl.Marker({ element: el, anchor: 'center' })
                     .setLngLat(MARKER_4.COORDS).addTo(map);
                 numMkr4 = createNumberMarker('4', MARKER_4.COORDS);
-                popup4 = createSatPopup(MARKER_4);
+                popup4 = createSatPopup(MARKER_4, 4);
                 popup4.addTo(map);
             }
             if (!marker5) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
                 marker5 = new mapboxgl.Marker({ element: el, anchor: 'center' })
                     .setLngLat(MARKER_5.COORDS).addTo(map);
-                numMkr5 = createNumberMarker('5', MARKER_5.COORDS, [0, 35]);  // Below marker
-                popup5 = createSatPopup(MARKER_5);
+                numMkr5 = createNumberMarker('5', MARKER_5.COORDS, [0, 35]);
+                popup5 = createSatPopup(MARKER_5, 5);
                 popup5.addTo(map);
             }
             if (!marker6) {
@@ -698,7 +747,7 @@ function animateChapter8(map, chapterConfig) {
                 marker6 = new mapboxgl.Marker({ element: el, anchor: 'center' })
                     .setLngLat(MARKER_6.COORDS).addTo(map);
                 numMkr6 = createNumberMarker('6', MARKER_6.COORDS);
-                popup6 = createSatPopup(MARKER_6);
+                popup6 = createSatPopup(MARKER_6, 6);
                 popup6.addTo(map);
             }
 
