@@ -482,35 +482,10 @@ function startLoop() {
 }
 
 /* ============================================
-   MOUSE PARALLAX
+   MOUSE PARALLAX (disabled)
    ============================================ */
 function initParallax() {
-    const container = document.getElementById(LUMIA_CONFIG.containerId);
-    const grid = document.querySelector('.lumia-grid');
-    if (!container || !grid) return;
-    
-    const maxMove = 15; // Maximum pixels to move
-    
-    container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        // Calculate offset from center (-1 to 1)
-        const offsetX = (e.clientX - rect.left - centerX) / centerX;
-        const offsetY = (e.clientY - rect.top - centerY) / centerY;
-        
-        // Apply subtle movement (inverted for natural feel)
-        const moveX = -offsetX * maxMove;
-        const moveY = -offsetY * maxMove;
-        
-        grid.style.transform = `translateY(-50%) translate(${moveX}px, ${moveY}px)`;
-    });
-    
-    // Reset on mouse leave
-    container.addEventListener('mouseleave', () => {
-        grid.style.transform = 'translateY(-50%) translate(0px, 0px)';
-    });
+    // Parallax removed — no-op
 }
 
 /* ============================================

@@ -112,7 +112,7 @@
            dateRange: { start: 'JAN 2025', end: 'DEC 2025' },
            camera: {
                center: [0, 20],
-               zoom: 1.8,
+               zoom: 1.9,
                pitch: 0,
                bearing: 0,
                duration: 2000
@@ -736,24 +736,34 @@
            title: 'LNG PHECDA',
            subtitle: 'Critical Infrastructure Loitering',
            region: 'Irish Sea / Bay of Biscay',
-           dateRange: { start: 'AUG 29, 2025', end: 'OCT 02, 2025' },
+           dateRange: { start: 'OCT 16, 2025', end: 'NOV 23, 2025' },
            camera: {
-               center: [-8, 50],  // Irish Sea / Bay of Biscay
-               zoom: 5,
-               pitch: 35,
-               bearing: 15,
+               center: [-0.542, 53.936],  // Irish Sea / Bay of Biscay
+               zoom: 5.57,
+               pitch: 0,
+               bearing: 0,
                duration: 2500
            },
            scrollType: 'vertical',
-           layers: ['october-ais-track', 'october-loiter-zones'],
+           layers: ['ch10-track-line', 'ch10-cables-line'],
            legend: [
-               { type: 'line', color: '#eff379', label: 'AIS Track' },
-               { type: 'area', color: 'rgba(255, 215, 0, 0.3)', label: 'Loiter Zone' }
+               { type: 'line', color: '#00ff88', label: 'LNG PHECDA AIS Track' },
+               { type: 'line', color: '#00a3e3', label: 'Telecom Cable' },
+               { type: 'line', color: '#ff9f43', label: 'Electricity Cable' },
+               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' }
            ],
+           vesselInfo: {
+               vessel1: {
+                   name: 'LNG PHECDA',
+                   imo: '9834313',
+                   cargo: 'LNG',
+                   operation: 'LOITERING'
+               }
+           },
            vessels: [
-               { name: 'LNG PHECDA', color: '#eff379', status: 'Loitering' }
+               { name: 'LNG PHECDA', color: '#00ff88', status: 'Loitering' }
            ],
-           dataFile: 'data/chapter10-october.geojson',
+           dataFile: 'data/chapter10-lng-phecda-extended.geojson',
            animateFile: 'animatechapter10'
        },
        
@@ -906,7 +916,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'SKIPPER',
-                   imo: '9220772',
+                   imo: '9304667',
                    cargo: 'CRUDE OIL',
                    operation: 'US SEIZURE'
                }
@@ -2711,7 +2721,7 @@
        }
        
        // Skip flyTo for chapters with custom cinematic camera animations
-       const chaptersWithCustomCamera = ['september-h1'];
+       const chaptersWithCustomCamera = ['september-h1', 'october'];
        if (chaptersWithCustomCamera.includes(STATE.currentChapter)) {
            console.log('[FLY] Custom camera chapter, skipping default flyTo');
            if (callback) setTimeout(callback, 100);

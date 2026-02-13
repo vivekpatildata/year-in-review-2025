@@ -92,6 +92,7 @@ function animateChapter12(map, chapterConfig) {
     let running = false;
     let startT = null;
     let currentPhase = 0;  // 0-6 phases
+    let assessedCoordsSoFar = []; // Track the assessed path coordinates as they're built
 
     // Markers and popups
     let markers = [];
@@ -686,6 +687,7 @@ function animateChapter12(map, chapterConfig) {
         clearLayers();
         domFallbackCleanup();
         currentPhase = 0;
+        assessedCoordsSoFar = [];
     }
 
     // ============================================================================
@@ -850,39 +852,12 @@ function animateChapter12(map, chapterConfig) {
     }
 
     // ============================================================================
-    // BUILD ASSESSED PATH COORDINATES
-    // ============================================================================
-
-    function buildAssessedPath() {
-        // From Jose Terminal to STS point to Dark detection to SKIPPER AIS start
-        // Route goes through water to avoid land crossings
-        const skipperStart = skipperCoords ? skipperCoords[0] : CONFIG.SKIPPER_AIS_START;
-
-        return [
-            CONFIG.DET_1,           // Detection 1: Jose Terminal [-64.8279, 10.1396]
-            CONFIG.DET_2,           // Detection 2: Anchored [-64.8038, 10.2158]
-            // Waypoint: Go north into Caribbean Sea - STAY OFFSHORE to avoid Venezuela mainland
-            [-65.0, 11.0],          // North from Jose, staying offshore
-            [-66.0, 12.0],          // Northwest through Caribbean Sea
-            [-67.5, 12.3],          // Continue west, north of coast
-            CONFIG.DET_3,           // Detection 3: STS location [-68.8317, 11.8333]
-            CONFIG.DET_4,           // Detection 4: Heading east [-68.1134, 11.4955]
-            // Waypoint: Route east through Caribbean - stay north of islands
-            [-66.0, 12.0],          // East through Caribbean
-            [-63.5, 11.5],          // Continue east, well north of Trinidad
-            [-61.0, 10.8],          // Southeast, north of Trinidad
-            [-59.0, 9.5],           // Past Tobago/Grenada area
-            [-58.0, 8.5],           // Continue toward SKIPPER AIS start
-            skipperStart            // SKIPPER AIS track starts [-56.906667, 7.818333]
-        ];
-    }
-
-    // ============================================================================
-    // SHOW MAIN - Sequential Animation
+    // SHOW MAIN - Sequential Animation (NEW SEQUENCE)
+    // Spoof → dotted→DET1 → dotted→DET2 → dotted→DET3 → dotted→DET4 → dotted→AIS start → AIS animate
     // ============================================================================
 
     async function showMain() {
-        console.log('  showMain (SKIPPER - Venezuelan Oil Seizure)');
+        console.log('  showMain (SKIPPER - Venezuelan Oil Seizure) [NEW SEQUENCE]');
         clearAll();
 
         await loadData();
@@ -893,9 +868,6 @@ function animateChapter12(map, chapterConfig) {
 
         // Create legend
         createLegend();
-
-        // Build assessed path
-        const assessedPath = buildAssessedPath();
 
         // Add assessed path source - starts empty
         map.addSource(SOURCE_ASSESSED, {
@@ -923,7 +895,7 @@ function animateChapter12(map, chapterConfig) {
             data: { type: 'Feature', geometry: { type: 'LineString', coordinates: [skipperCoords[0]] } }
         });
 
-        // SKIPPER Glow
+        // SKIPPER Glow (hidden until AIS phase)
         map.addLayer({
             id: LAYER_SKIPPER_GLOW,
             type: 'line',
@@ -937,7 +909,7 @@ function animateChapter12(map, chapterConfig) {
             }
         });
 
-        // SKIPPER Main (hidden until phase 6)
+        // SKIPPER Main (hidden until AIS phase)
         map.addLayer({
             id: LAYER_SKIPPER,
             type: 'line',
@@ -950,77 +922,138 @@ function animateChapter12(map, chapterConfig) {
             }
         });
 
-        // Start sequential animation
+        // Start the new sequential animation
         running = true;
         currentPhase = 0;
-        runSequentialAnimation(assessedPath);
+        runNewSequence();
     }
 
     // ============================================================================
-    // SEQUENTIAL ANIMATION - Runs through all phases in order
+    // NEW SEQUENTIAL ANIMATION
+    // Phase 0: Spoofing marker
+    // Phase 1: Dotted line spoof → DET_1, then show DET_1 + #1 + sat1
+    // Phase 2: Dotted line → DET_2, then show DET_2 + #2 + sat2
+    // Phase 3: Dotted line → DET_3 (via waypoints), then show DET_3 + #3 + sat3
+    // Phase 4: Dotted line → DET_4, then show DET_4 + #4 + sat4
+    // Phase 5: Dotted line DET_4 → first coord of new Skipper AIS (via waypoints)
+    // Phase 6: Animate Skipper AIS track
     // ============================================================================
 
-    function runSequentialAnimation(assessedPath) {
+    function runNewSequence() {
         if (!running) return;
 
-        // assessedPath now has waypoints:
-        // [0] DET_1, [1] DET_2, [2] waypoint, [3] waypoint, [4] DET_3, [5] DET_4,
-        // [6-9] waypoints, [10] SKIPPER start
+        const skipperAisStart = skipperCoords[0]; // [-61.482012, 11.65759]
 
-        // Phase 0: Show Detection 1 (Dark detection at Jose Terminal)
-        showDetection1();
+        // Initialize the assessed path tracking from spoofing marker
+        assessedCoordsSoFar = [CONFIG.SKIPPER_AIS_START];
 
-        // Phase 1: After delay, show Detection 2
+        // === PHASE 0: Show spoofing marker at SKIPPER_AIS_START ===
+        console.log('  Phase 0: Spoofing marker');
+        showSpoofingMarker();
+
+        // === PHASE 1: Dotted line from spoof → DET_1, then show DET_1 ===
         safeSetTimeout(() => {
             if (!running) return;
-            showDetection2();
+            console.log('  Phase 1: Dotted → DET_1');
 
-            // Phase 2: Animate dotted line from Det 1-2 through waypoints to Det 3 (STS)
-            safeSetTimeout(() => {
-                if (!running) return;
-                // Animate through waypoints to DET_3 (index 4)
-                animateAssessedPath(
-                    [assessedPath[0], assessedPath[1]],
-                    [assessedPath[2], assessedPath[3], assessedPath[4]],
-                    () => {
-                        // Phase 3: Show STS detection
-                        showDetection3();
+            // Waypoints from spoof location to Jose Terminal
+            // Route: go NW past Tobago, north of Trinidad, then west along Venezuela coast
+            animateAssessedPath(
+                [CONFIG.SKIPPER_AIS_START],
+                [
+                    [-58.5, 9.8],       // NW from spoof, approaching Tobago from south
+                    [-60.2, 11.0],      // Pass north of Tobago into Caribbean Sea
+                    [-61.5, 11.2],      // North of Trinidad, open water
+                    [-63.0, 11.0],      // Continue west, north of Margarita Island
+                    [-64.2, 10.6],      // Approach Jose from the north, staying offshore
+                    CONFIG.DET_1        // Jose Terminal
+                ],
+                () => {
+                    if (!running) return;
+                    showDetection1();
 
-                        // Phase 4: Animate dotted line to Det 4
-                        safeSetTimeout(() => {
-                            if (!running) return;
-                            animateAssessedSegment(
-                                assessedPath.slice(0, 5),
-                                assessedPath[5],
-                                () => {
-                                    // Show Detection 4
-                                    showDetection4();
+                    // === PHASE 2: Dotted line → DET_2, then show DET_2 ===
+                    safeSetTimeout(() => {
+                        if (!running) return;
+                        console.log('  Phase 2: Dotted → DET_2');
 
-                                    // Phase 5: Animate dotted line through waypoints to SKIPPER start
-                                    safeSetTimeout(() => {
-                                        if (!running) return;
-                                        animateAssessedPath(
-                                            assessedPath.slice(0, 6),
-                                            assessedPath.slice(6), // waypoints + SKIPPER start
-                                            () => {
-                                                // Show spoofing marker at SKIPPER AIS start
-                                                showSpoofingMarker();
+                        // DET_1 and DET_2 are very close (same area), direct segment
+                        animateAssessedSegment(
+                            getCurrentAssessedCoords(),
+                            CONFIG.DET_2,
+                            () => {
+                                if (!running) return;
+                                showDetection2();
 
-                                                // Phase 6: Animate SKIPPER AIS track
-                                                safeSetTimeout(() => {
-                                                    if (!running) return;
-                                                    animateSkipperTrack();
-                                                }, 200);
-                                            }
-                                        );
-                                    }, 400);
-                                }
-                            );
-                        }, 400);
-                    }
-                );
-            }, CONFIG.PHASE_DELAY);
+                                // === PHASE 3: Dotted line → DET_3 (via waypoints), then show DET_3 ===
+                                safeSetTimeout(() => {
+                                    if (!running) return;
+                                    console.log('  Phase 3: Dotted → DET_3');
+
+                                    animateAssessedPath(
+                                        getCurrentAssessedCoords(),
+                                        [
+                                            [-65.0, 11.0],   // North offshore
+                                            [-66.0, 12.0],   // Northwest Caribbean
+                                            [-67.5, 12.3],   // Continue west
+                                            CONFIG.DET_3     // STS south of Curaçao
+                                        ],
+                                        () => {
+                                            if (!running) return;
+                                            showDetection3();
+
+                                            // === PHASE 4: Dotted line → DET_4, then show DET_4 ===
+                                            safeSetTimeout(() => {
+                                                if (!running) return;
+                                                console.log('  Phase 4: Dotted → DET_4');
+
+                                                animateAssessedSegment(
+                                                    getCurrentAssessedCoords(),
+                                                    CONFIG.DET_4,
+                                                    () => {
+                                                        if (!running) return;
+                                                        showDetection4();
+
+                                                        // === PHASE 5: Dotted line DET_4 → Skipper AIS start ===
+                                                        safeSetTimeout(() => {
+                                                            if (!running) return;
+                                                            console.log('  Phase 5: Dotted → Skipper AIS start');
+
+                                                            animateAssessedPath(
+                                                                getCurrentAssessedCoords(),
+                                                                [
+                                                                    [-66.0, 12.0],   // East through Caribbean
+                                                                    [-63.5, 11.8],   // Continue east
+                                                                    skipperAisStart  // New Skipper AIS first coord
+                                                                ],
+                                                                () => {
+                                                                    if (!running) return;
+
+                                                                    // === PHASE 6: Animate Skipper AIS track ===
+                                                                    safeSetTimeout(() => {
+                                                                        if (!running) return;
+                                                                        animateSkipperTrack();
+                                                                    }, 200);
+                                                                }
+                                                            );
+                                                        }, CONFIG.PHASE_DELAY);
+                                                    }
+                                                );
+                                            }, CONFIG.PHASE_DELAY);
+                                        }
+                                    );
+                                }, CONFIG.PHASE_DELAY);
+                            }
+                        );
+                    }, CONFIG.PHASE_DELAY);
+                }
+            );
         }, CONFIG.PHASE_DELAY);
+    }
+
+    // Helper: get current assessed path coordinates from tracking array
+    function getCurrentAssessedCoords() {
+        return [...assessedCoordsSoFar];
     }
 
     // Animate through multiple waypoints
@@ -1047,8 +1080,8 @@ function animateChapter12(map, chapterConfig) {
     function showDetection1() {
         console.log('  Phase 0: Detection 1 - SKIPPER loading at Jose Terminal (14-18 Nov)');
 
-        // Dark detection marker with red glow - heading: docked/stationary (0°)
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch12-dark-marker', 45);
+        // Dark detection marker with red glow - heading: 6:30 (SVG points right, +105° CSS)
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch12-dark-marker', 105);
 
         // Number marker - offset to left to avoid overlap with Detection 2
         const numMkr = createNumberMarker('1', CONFIG.DET_1, [-30, 15]);
@@ -1101,8 +1134,8 @@ function animateChapter12(map, chapterConfig) {
     function showDetection3() {
         console.log('  Phase 3: Detection 3 - STS with NEPTUNE 6 south of Curaçao (07 Dec)');
 
-        // Light-Dark STS detection marker with cyan glow - no rotation
-        const mkr = createSvgMarker('assets/svg/lightdarkstsdetection.svg', CONFIG.DET_3, 'ch12-sts-marker', 0);
+        // Light-Dark STS detection marker with cyan glow - heading: 11:30 (square SVG, -15° CSS)
+        const mkr = createSvgMarker('assets/svg/lightdarkstsdetection.svg', CONFIG.DET_3, 'ch12-sts-marker', -15);
 
         // Number marker
         const numMkr = createNumberMarker('3', CONFIG.DET_3);
@@ -1128,8 +1161,8 @@ function animateChapter12(map, chapterConfig) {
     function showDetection4() {
         console.log('  Phase 4: Detection 4 - SKIPPER (AIS dark) heading east (08 Dec)');
 
-        // Dark detection marker with red glow - heading: pointing towards STS marker (northwest ~-50°)
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_4, 'ch12-dark-marker', -50);
+        // Dark detection marker with red glow - heading: 10 o'clock (SVG points right, +210° CSS)
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_4, 'ch12-dark-marker', 210);
 
         // Number marker
         const numMkr = createNumberMarker('4', CONFIG.DET_4);
@@ -1153,7 +1186,7 @@ function animateChapter12(map, chapterConfig) {
     }
 
     function showSpoofingMarker() {
-        console.log('  Phase 5: Spoofing marker - SKIPPER AIS (spoofed since Atlantic crossing)');
+        console.log('  Phase 0: Spoofing marker - SKIPPER AIS (spoofed since Atlantic crossing)');
 
         // Spoofing marker at SKIPPER AIS track start point with purple glow - no rotation
         const mkr = createSvgMarker('assets/svg/spoofing.svg', CONFIG.SKIPPER_AIS_START, 'ch12-spoof-marker', 0);
@@ -1200,6 +1233,8 @@ function animateChapter12(map, chapterConfig) {
                         geometry: { type: 'LineString', coordinates: finalCoords }
                     });
                 }
+                // Track the built path
+                assessedCoordsSoFar = finalCoords;
                 if (onComplete) onComplete();
             } else {
                 animId = requestAnimationFrame(animate);

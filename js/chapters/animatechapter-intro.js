@@ -248,6 +248,9 @@ function animateChapterIntro(map, chapterConfig) {
         timeouts.forEach(id => clearTimeout(id));
         timeouts.length = 0;
 
+        // Reset text highlights
+        clearHighlights();
+
         // Remove map layers/sources
         try {
             if (map.getLayer(LAYER_LANES_BRIGHT)) map.removeLayer(LAYER_LANES_BRIGHT);
@@ -262,6 +265,28 @@ function animateChapterIntro(map, chapterConfig) {
     // SHOW MAIN
     // ============================================================================
 
+    // ============================================================================
+    // TEXT HIGHLIGHT ANIMATION
+    // ============================================================================
+
+    function triggerHighlights() {
+        const highlights = document.querySelectorAll('.intro-highlight');
+        if (!highlights.length) return;
+
+        // Add 'active' class — CSS transition-delay handles the stagger
+        const tid = setTimeout(() => {
+            if (!running) return;
+            highlights.forEach(el => el.classList.add('active'));
+            console.log(`[Intro] Triggered ${highlights.length} text highlights`);
+        }, 600); // small delay so card is visible first
+        timeouts.push(tid);
+    }
+
+    function clearHighlights() {
+        const highlights = document.querySelectorAll('.intro-highlight');
+        highlights.forEach(el => el.classList.remove('active'));
+    }
+
     function showMain() {
         console.log('[Intro] Starting shipping lanes visualization');
         cleanup();
@@ -272,6 +297,9 @@ function animateChapterIntro(map, chapterConfig) {
             if (running) loadAndAddShippingLanes();
         }, 300);
         timeouts.push(tid);
+
+        // Trigger text highlights
+        triggerHighlights();
     }
 
     // ============================================================================

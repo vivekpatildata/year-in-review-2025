@@ -575,8 +575,9 @@ function animateChapter6(map, chapterConfig) {
                 lightDetSuezMkr_pending = true;
                 setTimeout(() => {
                     if (!lightDetSuezMkr && running) {
+                        // SVG points right (3 o'clock), 5 o'clock = 60°
                         const el = createLightMarker(CONFIG.SVG_LIGHT);
-                        lightDetSuezMkr = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                        lightDetSuezMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 60 })
                             .setLngLat(LIGHT_DET_SUEZ.COORDS).addTo(map);
 
                         lightDetSuezPopup = new mapboxgl.Popup({
@@ -653,8 +654,9 @@ function animateChapter6(map, chapterConfig) {
                 darkDetMkr_pending = true;
                 setTimeout(() => {
                     if (!darkDetMkr && running) {
+                        // SVG points right (3 o'clock), 5 o'clock = 60°
                         const el = createDarkMarker(CONFIG.SVG_DARK);
-                        darkDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                        darkDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 60 })
                             .setLngLat(DARK_DET.COORDS).addTo(map);
 
                         darkDetPopup = new mapboxgl.Popup({
@@ -727,10 +729,10 @@ function animateChapter6(map, chapterConfig) {
 
                 // FALLBACK: Create any markers that haven't appeared yet due to delays
                 setTimeout(() => {
-                    // Suez light detection
+                    // Suez light detection (5 o'clock = 60°)
                     if (!lightDetSuezMkr) {
                         const el = createLightMarker(CONFIG.SVG_LIGHT);
-                        lightDetSuezMkr = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                        lightDetSuezMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 60 })
                             .setLngLat(LIGHT_DET_SUEZ.COORDS).addTo(map);
                         lightDetSuezPopup = new mapboxgl.Popup({
                             closeButton: false, closeOnClick: false,
@@ -740,10 +742,10 @@ function animateChapter6(map, chapterConfig) {
                             .setHTML(`<div class="ch6-light-img-holder"><img class="ch6-light-img" src="${LIGHT_DET_SUEZ.IMAGE}"></div>`)
                             .addTo(map);
                     }
-                    // Dark detection
+                    // Dark detection (5 o'clock = 60°)
                     if (!darkDetMkr) {
                         const el = createDarkMarker(CONFIG.SVG_DARK);
-                        darkDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                        darkDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 60 })
                             .setLngLat(DARK_DET.COORDS).addTo(map);
                         darkDetPopup = new mapboxgl.Popup({
                             closeButton: false, closeOnClick: false,

@@ -1086,10 +1086,11 @@ function animateChapter7(mapInput, chapterConfig) {
             }
 
             // Show light detection at El Dekheila (~90% through AIS track) on RIGHT map
+            // SVG points right (3 o'clock), 12 o'clock = -90°
             if (!lightMkrShown && pct >= 0.90) {
                 lightMkrShown = true;
                 const lightEl = createLightMarker('assets/svg/lightdetection.svg');
-                lightMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center' })
+                lightMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center', rotation: -90 })
                     .setLngLat(CONFIG.LIGHT_MKR)
                     .addTo(mapRight);
                 lightPopup = createImagePopup(
@@ -1134,7 +1135,7 @@ function animateChapter7(mapInput, chapterConfig) {
 
             if (!lightMkrShown) {
                 const lightEl = createLightMarker('assets/svg/lightdetection.svg');
-                lightMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center' })
+                lightMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center', rotation: -90 })
                     .setLngLat(CONFIG.LIGHT_MKR)
                     .addTo(mapRight);
                 lightPopup = createImagePopup(

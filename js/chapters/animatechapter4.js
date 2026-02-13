@@ -759,8 +759,9 @@ function animateChapter4(map, chapterConfig) {
         mainEndIndex = Math.floor(total * MAIN_STOP_PCT);
 
         // === DARK DETECTION 1: Asalouyeh Port, Iran (PRIMARY - White tint glow) ===
+        // SVG points right (3 o'clock), 2 o'clock = -30°
         const darkEl1 = createDarkMarkerPrimary(CONFIG.SVG_DARK);
-        darkDetMkr1 = new mapboxgl.Marker({ element: darkEl1, anchor: 'center' })
+        darkDetMkr1 = new mapboxgl.Marker({ element: darkEl1, anchor: 'center', rotation: -30 })
             .setLngLat(DARK_DETECTION_1.COORDS)
             .addTo(map);
 
@@ -999,10 +1000,11 @@ function animateChapter4(map, chapterConfig) {
             const h1Pct = (progress - mainEndIndex) / remainingPoints;
 
             // At 90% of H1 animation, show Mozambique marker + satellite image
+            // SVG points right (3 o'clock), 11:45 = -97.5°
             if (h1Pct >= 0.9 && !mozambiqueMkr) {
                 // Light detection marker at last point of track
                 const lightEl = createLightMarker(CONFIG.SVG_LIGHT);
-                mozambiqueMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center' })
+                mozambiqueMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center', rotation: -97.5 })
                     .setLngLat([H1_MARKERS.MOZAMBIQUE.lng, H1_MARKERS.MOZAMBIQUE.lat])
                     .addTo(map);
 
@@ -1036,7 +1038,7 @@ function animateChapter4(map, chapterConfig) {
             // Ensure marker + popup exist (fallback if not created during animation)
             if (!mozambiqueMkr) {
                 const lightEl = createLightMarker(CONFIG.SVG_LIGHT);
-                mozambiqueMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center' })
+                mozambiqueMkr = new mapboxgl.Marker({ element: lightEl, anchor: 'center', rotation: -97.5 })
                     .setLngLat([H1_MARKERS.MOZAMBIQUE.lng, H1_MARKERS.MOZAMBIQUE.lat])
                     .addTo(map);
             }

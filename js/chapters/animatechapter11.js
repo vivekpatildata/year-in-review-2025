@@ -1217,11 +1217,13 @@ function animateChapter11(map, chapterConfig) {
     // MARKER HELPERS
     // ============================================================================
 
-    function createSvgMarker(svgPath, lngLat, markerClass = '') {
+    function createSvgMarker(svgPath, lngLat, markerClass = '', rotation = 0) {
         const el = document.createElement('div');
         el.className = `ch11-svg-marker ${markerClass}`;
         el.innerHTML = `<img src="${svgPath}" alt="marker">`;
-        const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+        const opts = { element: el, anchor: 'center' };
+        if (rotation !== 0) opts.rotation = rotation;
+        const marker = new mapboxgl.Marker(opts)
             .setLngLat(lngLat)
             .addTo(map);
         markers.push(marker);
@@ -1284,11 +1286,13 @@ function animateChapter11(map, chapterConfig) {
     }
 
     // STS marker with white tint glow (primary - attention grabbing)
-    function createStsMarkerPrimary(svgPath, lngLat) {
+    function createStsMarkerPrimary(svgPath, lngLat, rotation = 0) {
         const el = document.createElement('div');
         el.className = 'ch11-svg-marker ch11-sts-marker-primary';
         el.innerHTML = `<img src="${svgPath}" alt="STS Detection">`;
-        const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+        const opts = { element: el, anchor: 'center' };
+        if (rotation !== 0) opts.rotation = rotation;
+        const marker = new mapboxgl.Marker(opts)
             .setLngLat(lngLat)
             .addTo(map);
         markers.push(marker);
@@ -1696,10 +1700,11 @@ function animateChapter11(map, chapterConfig) {
     // ============================================================================
 
     // Detection #1: Dark detection at Jask - WITH sat image
+    // SVG points right (3 o'clock), 3:35 = 17.5°
     function showDetection1() {
         console.log('  Detection 1: Dark detection at Jask, Iran');
 
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker');
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker', 17.5);
         const numMkr = createNumberMarker('1', CONFIG.DET_1);
         const popup = createImagePopup(
             CONFIG.DET_1,
@@ -1719,10 +1724,11 @@ function animateChapter11(map, chapterConfig) {
     }
 
     // Detection #2: Light detection in Malacca - WITH sat image
+    // SVG points right (3 o'clock), 4 o'clock = 30°
     function showDetection2() {
         console.log('  Detection 2: Light detection in Malacca Strait');
 
-        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_2, 'ch11-light-marker');
+        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_2, 'ch11-light-marker', 30);
         const numMkr = createNumberMarker('2', CONFIG.DET_2);
         const popup = createImagePopup(
             CONFIG.DET_2,
@@ -1742,11 +1748,12 @@ function animateChapter11(map, chapterConfig) {
     }
 
     // Detection #3: STS with STELLAR ORACLE - WITH sat image (WHITE TINT - ATTENTION)
+    // Bunkering SVG is square (default 12 o'clock), 11:30 = 345°
     function showDetection3() {
         console.log('  Detection 3: STS with STELLAR ORACLE (white tint attention)');
 
         // Use primary marker with white tint glow for attention
-        const mkr = createStsMarkerPrimary('assets/svg/bunkering.svg', CONFIG.DET_3);
+        const mkr = createStsMarkerPrimary('assets/svg/bunkering.svg', CONFIG.DET_3, 345);
         const numMkr = createNumberMarker('3', CONFIG.DET_3);
         // Use STS image popup with white tint glow holder
         const popup = createStsImagePopup(
@@ -1766,10 +1773,11 @@ function animateChapter11(map, chapterConfig) {
     }
 
     // Detection #4: Light detection - WITH sat image (chapter11D)
+    // SVG points right (3 o'clock), 12 o'clock = -90°
     function showDetection4() {
         console.log('  Detection 4: Light detection with sat image');
 
-        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_4, 'ch11-light-marker');
+        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_4, 'ch11-light-marker', -90);
         const numMkr = createNumberMarker('4', CONFIG.DET_4);
         const popup = createImagePopup(
             CONFIG.DET_4,
@@ -1837,10 +1845,11 @@ function animateChapter11(map, chapterConfig) {
     }
 
     // Detection #5: Light detection near Jiangsu - WITH sat image
+    // SVG points right (3 o'clock), 12 o'clock = -90°
     function showDetection5() {
         console.log('  Detection 5: Light detection near Jiangsu, China');
 
-        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_5, 'ch11-light-marker');
+        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_5, 'ch11-light-marker', -90);
         const numMkr = createNumberMarker('5', CONFIG.DET_5);
         const popup = createImagePopup(
             CONFIG.DET_5,

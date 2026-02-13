@@ -624,10 +624,10 @@ function animateChapter8(map, chapterConfig) {
 
             if (vesselMkr) vesselMkr.setLngLat(coords[progress]);
 
-            // === MARKER 1: Irving Reef at PCT_MARKER_1 ===
+            // === MARKER 1: Irving Reef at PCT_MARKER_1 (7 o'clock = 120°) ===
             if (pct >= PCT_MARKER_1 && !marker1) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker1 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker1 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 120 })
                     .setLngLat(MARKER_1.COORDS)
                     .addTo(map);
                 numMkr1 = createNumberMarker('1', MARKER_1.COORDS, [35, -35]);  // Diagonally right of marker
@@ -635,10 +635,10 @@ function animateChapter8(map, chapterConfig) {
                 popup1.addTo(map);
             }
 
-            // === MARKER 2: Subi Reef at PCT_MARKER_2 ===
+            // === MARKER 2: Subi Reef at PCT_MARKER_2 (4 o'clock = 30°) ===
             if (pct >= PCT_MARKER_2 && !marker2) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker2 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker2 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 30 })
                     .setLngLat(MARKER_2.COORDS)
                     .addTo(map);
                 numMkr2 = createNumberMarker('2', MARKER_2.COORDS);
@@ -646,10 +646,10 @@ function animateChapter8(map, chapterConfig) {
                 popup2.addTo(map);
             }
 
-            // === MARKER 3: North Gaven Reef at PCT_MARKER_3 ===
+            // === MARKER 3: North Gaven Reef at PCT_MARKER_3 (7 o'clock = 120°) ===
             if (pct >= PCT_MARKER_3 && !marker3) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker3 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker3 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 120 })
                     .setLngLat(MARKER_3.COORDS)
                     .addTo(map);
                 numMkr3 = createNumberMarker('3', MARKER_3.COORDS, [35, 0]);  // Right of marker
@@ -657,10 +657,10 @@ function animateChapter8(map, chapterConfig) {
                 popup3.addTo(map);
             }
 
-            // === MARKER 4: Mischief Reef at PCT_MARKER_4 ===
+            // === MARKER 4: Mischief Reef at PCT_MARKER_4 (7:30 = 135°) ===
             if (pct >= PCT_MARKER_4 && !marker4) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker4 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker4 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 135 })
                     .setLngLat(MARKER_4.COORDS)
                     .addTo(map);
                 numMkr4 = createNumberMarker('4', MARKER_4.COORDS);
@@ -668,10 +668,10 @@ function animateChapter8(map, chapterConfig) {
                 popup4.addTo(map);
             }
 
-            // === MARKER 5: Union Banks at PCT_MARKER_5 ===
+            // === MARKER 5: Union Banks at PCT_MARKER_5 (6:10 = 95°) ===
             if (pct >= PCT_MARKER_5 && !marker5) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker5 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker5 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 95 })
                     .setLngLat(MARKER_5.COORDS)
                     .addTo(map);
                 numMkr5 = createNumberMarker('5', MARKER_5.COORDS, [0, 35]);  // Below marker
@@ -679,10 +679,10 @@ function animateChapter8(map, chapterConfig) {
                 popup5.addTo(map);
             }
 
-            // === MARKER 6: Fiery Cross Reef at PCT_MARKER_6 ===
+            // === MARKER 6: Fiery Cross Reef at PCT_MARKER_6 (11 o'clock = -120°) ===
             if (pct >= PCT_MARKER_6 && !marker6) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker6 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker6 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: -120 })
                     .setLngLat(MARKER_6.COORDS)
                     .addTo(map);
                 numMkr6 = createNumberMarker('6', MARKER_6.COORDS);
@@ -704,7 +704,7 @@ function animateChapter8(map, chapterConfig) {
             // Ensure all markers are placed
             if (!marker1) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker1 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker1 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 120 })
                     .setLngLat(MARKER_1.COORDS).addTo(map);
                 numMkr1 = createNumberMarker('1', MARKER_1.COORDS, [35, -35]);
                 popup1 = createSatPopup(MARKER_1, 1);
@@ -712,7 +712,7 @@ function animateChapter8(map, chapterConfig) {
             }
             if (!marker2) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker2 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker2 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 30 })
                     .setLngLat(MARKER_2.COORDS).addTo(map);
                 numMkr2 = createNumberMarker('2', MARKER_2.COORDS);
                 popup2 = createSatPopup(MARKER_2, 2);
@@ -720,7 +720,7 @@ function animateChapter8(map, chapterConfig) {
             }
             if (!marker3) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker3 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker3 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 120 })
                     .setLngLat(MARKER_3.COORDS).addTo(map);
                 numMkr3 = createNumberMarker('3', MARKER_3.COORDS, [35, 0]);
                 popup3 = createSatPopup(MARKER_3, 3);
@@ -728,7 +728,7 @@ function animateChapter8(map, chapterConfig) {
             }
             if (!marker4) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker4 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker4 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 135 })
                     .setLngLat(MARKER_4.COORDS).addTo(map);
                 numMkr4 = createNumberMarker('4', MARKER_4.COORDS);
                 popup4 = createSatPopup(MARKER_4, 4);
@@ -736,7 +736,7 @@ function animateChapter8(map, chapterConfig) {
             }
             if (!marker5) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker5 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker5 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: 95 })
                     .setLngLat(MARKER_5.COORDS).addTo(map);
                 numMkr5 = createNumberMarker('5', MARKER_5.COORDS, [0, 35]);
                 popup5 = createSatPopup(MARKER_5, 5);
@@ -744,7 +744,7 @@ function animateChapter8(map, chapterConfig) {
             }
             if (!marker6) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                marker6 = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                marker6 = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: -120 })
                     .setLngLat(MARKER_6.COORDS).addTo(map);
                 numMkr6 = createNumberMarker('6', MARKER_6.COORDS);
                 popup6 = createSatPopup(MARKER_6, 6);

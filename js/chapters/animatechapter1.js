@@ -410,9 +410,10 @@ function animateChapter1(map, chapterConfig) {
         // Full cleanup
         clearAll();
 
-        // Create STS marker with external SVG and blue glow
+        // Create STS marker with external SVG and blue glow (10:45 heading)
+        // SVG default points right (3 o'clock). User calibrated: -127.5 = 2 o'clock, so 11 o'clock = -217.5°
         const el = createLightMarker(CONFIG.SVG_LIGHT);
-        stsMkr = new mapboxgl.Marker({ element: el, anchor: 'center' })
+        stsMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: -217.5 })
             .setLngLat(CONFIG.STS_COORDS)
             .addTo(map);
 
@@ -532,16 +533,19 @@ function animateChapter1(map, chapterConfig) {
         if (galPopup) { galPopup.remove(); galPopup = null; }
 
         // Create 4 dark detection markers (yellow glow, no ring) using external SVG
+        // SVG default points right (3 o'clock), so subtract 90° from clock angle
+        // Det1=5:00(60°), Det2=6:00(90°), Det3=6:30(105°), Det4=6:30(105°)
         const darkCoords = [
             CONFIG.DARK_DET_1,
             CONFIG.DARK_DET_2,
             CONFIG.DARK_DET_3,
             CONFIG.DARK_DET_4
         ];
+        const darkRotations = [60, 90, 105, 105];
 
         darkCoords.forEach((coord, i) => {
             const el = createDarkMarker(CONFIG.SVG_DARK);
-            const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+            const marker = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: darkRotations[i] })
                 .setLngLat(coord)
                 .addTo(map);
             darkMkrs.push(marker);
@@ -621,16 +625,19 @@ function animateChapter1(map, chapterConfig) {
         if (galPopup) { galPopup.remove(); galPopup = null; }
 
         // Create 4 dark detection markers (yellow glow, no ring) using external SVG
+        // SVG default points right (3 o'clock), so subtract 90° from clock angle
+        // Det1=5:00(60°), Det2=6:00(90°), Det3=6:30(105°), Det4=6:30(105°)
         const darkCoords = [
             CONFIG.DARK_DET_1,
             CONFIG.DARK_DET_2,
             CONFIG.DARK_DET_3,
             CONFIG.DARK_DET_4
         ];
+        const darkRotations = [60, 90, 105, 105];
 
         darkCoords.forEach((coord, i) => {
             const el = createDarkMarker(CONFIG.SVG_DARK);
-            const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+            const marker = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: darkRotations[i] })
                 .setLngLat(coord)
                 .addTo(map);
             darkMkrs.push(marker);

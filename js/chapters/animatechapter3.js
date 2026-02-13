@@ -668,9 +668,10 @@ function animateChapter3(map, chapterConfig) {
             const mainPct = progress / mainEndIndex;
 
             // === KUWAIT - Light Detection Marker at start (10% of main) ===
+            // SVG points right (3 o'clock), 12 o'clock = -90°
             if (mainPct >= 0.1 && !kuwaitMkr) {
                 const kuwaitEl = createLightMarker(CONFIG.SVG_LIGHT);
-                kuwaitMkr = new mapboxgl.Marker({ element: kuwaitEl, anchor: 'center' })
+                kuwaitMkr = new mapboxgl.Marker({ element: kuwaitEl, anchor: 'center', rotation: -90 })
                     .setLngLat(KUWAIT.COORDS)
                     .addTo(map);
 
@@ -692,10 +693,11 @@ function animateChapter3(map, chapterConfig) {
             }
 
             // === IRAN - Dark Detection Markers at ~50% of main ===
+            // SVG points right (3 o'clock), 5 o'clock = 60°
             if (mainPct >= 0.5 && iranMkrs.length === 0) {
                 IRAN.DETECTIONS.forEach((det) => {
                     const iranEl = createDarkMarker(CONFIG.SVG_DARK);
-                    const marker = new mapboxgl.Marker({ element: iranEl, anchor: 'center' })
+                    const marker = new mapboxgl.Marker({ element: iranEl, anchor: 'center', rotation: 60 })
                         .setLngLat([det.lng, det.lat])
                         .addTo(map);
                     iranMkrs.push(marker);
@@ -744,10 +746,10 @@ function animateChapter3(map, chapterConfig) {
             }
             if (vesselMkr) vesselMkr.setLngLat(coords[mainEndIndex]);
 
-            // Ensure Kuwait marker exists
+            // Ensure Kuwait marker exists (12 o'clock = -90°)
             if (!kuwaitMkr) {
                 const kuwaitEl = createLightMarker(CONFIG.SVG_LIGHT);
-                kuwaitMkr = new mapboxgl.Marker({ element: kuwaitEl, anchor: 'center' })
+                kuwaitMkr = new mapboxgl.Marker({ element: kuwaitEl, anchor: 'center', rotation: -90 })
                     .setLngLat(KUWAIT.COORDS)
                     .addTo(map);
 
@@ -767,11 +769,11 @@ function animateChapter3(map, chapterConfig) {
                     .addTo(map);
             }
 
-            // Ensure Iran markers exist
+            // Ensure Iran markers exist (5 o'clock = 60°)
             if (iranMkrs.length === 0) {
                 IRAN.DETECTIONS.forEach((det) => {
                     const iranEl = createDarkMarker(CONFIG.SVG_DARK);
-                    const marker = new mapboxgl.Marker({ element: iranEl, anchor: 'center' })
+                    const marker = new mapboxgl.Marker({ element: iranEl, anchor: 'center', rotation: 60 })
                         .setLngLat([det.lng, det.lat])
                         .addTo(map);
                     iranMkrs.push(marker);
@@ -919,9 +921,10 @@ function animateChapter3(map, chapterConfig) {
             }
 
             // Detection 3 - Around 90% of H1 track (Ha Long Bay) + satellite image
+            // SVG points right (3 o'clock), 5 o'clock = 60°
             if (h1Pct >= 0.9 && !h1Mkr3) {
                 const el3 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr3 = new mapboxgl.Marker({ element: el3, anchor: 'center' })
+                h1Mkr3 = new mapboxgl.Marker({ element: el3, anchor: 'center', rotation: 60 })
                     .setLngLat([H1_MARKERS.DETECTION_3.lng, H1_MARKERS.DETECTION_3.lat])
                     .addTo(map);
 
@@ -967,7 +970,7 @@ function animateChapter3(map, chapterConfig) {
             }
             if (!h1Mkr3) {
                 const el3 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr3 = new mapboxgl.Marker({ element: el3, anchor: 'center' })
+                h1Mkr3 = new mapboxgl.Marker({ element: el3, anchor: 'center', rotation: 60 })
                     .setLngLat([H1_MARKERS.DETECTION_3.lng, H1_MARKERS.DETECTION_3.lat])
                     .addTo(map);
 

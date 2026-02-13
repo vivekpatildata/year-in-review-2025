@@ -78,7 +78,9 @@ const TIMELINE_STATE = {
     trackElement: null,
     containerElement: null,
     autoHideTimer: null,
-    lastScrollTime: 0
+    lastScrollTime: 0,
+    hasOnboarded: false,   // true after first ripple has played
+    hintElement: null      // "click to jump" tooltip
 };
 
 
@@ -326,6 +328,11 @@ function expandTimeline() {
     container.classList.remove('collapsed');
     TIMELINE_STATE.isExpanded = true;
 
+    // Play onboarding ripple on first expand
+    if (!TIMELINE_STATE.hasOnboarded) {
+        setTimeout(playOnboardingRipple, 400); // slight delay so expand animation finishes
+    }
+
     console.log('[TIMELINE] Expanded - showing full timeline');
 }
 
@@ -457,6 +464,8 @@ function setupTimelineInteraction() {
 
 
 function handleMonthClick(monthIndex) {
+    dismissOnboarding();
+
     const chapterId = getChapterForMonth(monthIndex);
     if (!chapterId) return;
 
@@ -475,6 +484,77 @@ function getChapterForMonth(monthIndex) {
         }
     }
     return null;
+}
+
+
+/* ============================================
+   ONBOARDING: First-expand ripple + click hint
+   Makes it obvious that months are clickable
+   ============================================ */
+
+function playOnboardingRipple() {
+    if (TIMELINE_STATE.hasOnboarded) return;
+    TIMELINE_STATE.hasOnboarded = true;
+
+    console.log('[TIMELINE] Playing onboarding ripple');
+
+    // Stagger a ping animation across all 12 month dots
+    TIMELINE_STATE.notchElements.forEach((notch, i) => {
+        setTimeout(() => {
+            notch.classList.add('onboard-ping');
+            // Remove class after animation completes so hover still works
+            setTimeout(() => notch.classList.remove('onboard-ping'), 650);
+        }, i * 80); // 80ms stagger = ~1s total wave
+    });
+
+    // Show the "click to jump" hint below the track
+    showClickHint();
+}
+
+
+function showClickHint() {
+    const wrapper = document.querySelector('.timeline-wrapper');
+    if (!wrapper || TIMELINE_STATE.hintElement) return;
+
+    const hint = document.createElement('div');
+    hint.className = 'timeline-click-hint';
+    hint.innerHTML = `
+        <span class="timeline-hint-cursor"></span>
+        <span class="timeline-hint-text">click any month to jump</span>
+    `;
+    wrapper.appendChild(hint);
+    TIMELINE_STATE.hintElement = hint;
+
+    // Trigger the entrance animation
+    requestAnimationFrame(() => {
+        hint.classList.add('visible');
+    });
+
+    // Graceful exit after 4.5s
+    setTimeout(() => {
+        if (hint.parentNode) {
+            hint.classList.remove('visible');
+            hint.classList.add('exiting');
+            setTimeout(() => {
+                if (hint.parentNode) hint.parentNode.removeChild(hint);
+                TIMELINE_STATE.hintElement = null;
+            }, 700);
+        }
+    }, 4500);
+}
+
+
+function dismissOnboarding() {
+    // Gracefully exit hint if user clicks a month
+    if (TIMELINE_STATE.hintElement && TIMELINE_STATE.hintElement.parentNode) {
+        TIMELINE_STATE.hintElement.classList.remove('visible');
+        TIMELINE_STATE.hintElement.classList.add('exiting');
+        const el = TIMELINE_STATE.hintElement;
+        setTimeout(() => {
+            if (el && el.parentNode) el.parentNode.removeChild(el);
+        }, 500);
+        TIMELINE_STATE.hintElement = null;
+    }
 }
 
 

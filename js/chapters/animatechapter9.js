@@ -45,7 +45,7 @@ function animateChapter9(map, chapterConfig) {
         // --- SATELLITE IMAGE LOCATIONS [lng, lat] ---
         BUNKERING_IMG: [159.8411, 53.2713],
         BUNKERING_IMG_PATH: 'images/chapter9/chapter9A.png',
-        BUNKERING_IMG_OFFSET: [200, 0],
+        BUNKERING_IMG_OFFSET: [160, 60],
 
         LIGHT_IMG_2: [108.1903, 19.7506],
         LIGHT_IMG_2_PATH: 'images/chapter9/chapter9B.png',
@@ -313,13 +313,40 @@ function animateChapter9(map, chapterConfig) {
                 padding: 0 !important;
             }
             
-            /* === REGULAR IMAGE HOLDER (No Black Edges) === */
+            /* === REGULAR IMAGE HOLDER (Blue Glow - matches Ch1 STS style) === */
             .ch9-regular-img-holder {
                 background: transparent !important;
                 border: none !important;
                 padding: 0 !important;
-                border-radius: 6px;
+                border-radius: 10px;
                 overflow: hidden;
+                box-shadow:
+                    0 0 20px rgba(0, 163, 227, 0.4),
+                    0 0 40px rgba(0, 163, 227, 0.25),
+                    0 0 50px rgba(0, 163, 227, 0.15);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                animation: ch9-blue-img-glow 2.5s ease-in-out infinite;
+            }
+            .ch9-regular-img-holder:hover {
+                transform: scale(1.05);
+                box-shadow:
+                    0 0 30px rgba(0, 163, 227, 0.55),
+                    0 0 50px rgba(0, 163, 227, 0.35),
+                    0 0 65px rgba(0, 163, 227, 0.2);
+            }
+            @keyframes ch9-blue-img-glow {
+                0%, 100% {
+                    box-shadow:
+                        0 0 20px rgba(0, 163, 227, 0.4),
+                        0 0 40px rgba(0, 163, 227, 0.25),
+                        0 0 50px rgba(0, 163, 227, 0.15);
+                }
+                50% {
+                    box-shadow:
+                        0 0 28px rgba(0, 163, 227, 0.55),
+                        0 0 50px rgba(0, 163, 227, 0.35),
+                        0 0 65px rgba(0, 163, 227, 0.2);
+                }
             }
             
             .ch9-regular-img-holder .ch9-sat-img {
@@ -787,8 +814,9 @@ function animateChapter9(map, chapterConfig) {
         });
 
         // Create bunkering marker immediately (Koryak FSU - Ship-to-Ship transfer)
+        // Bunkering SVG is square, default 12 o'clock. 7 o'clock = 210°
         const bunkeringEl = createBunkeringMarker('assets/svg/bunkering.svg');
-        bunkeringMkr = new mapboxgl.Marker({ element: bunkeringEl, anchor: 'center' })
+        bunkeringMkr = new mapboxgl.Marker({ element: bunkeringEl, anchor: 'center', rotation: 210 })
             .setLngLat(CONFIG.BUNKERING_MKR)
             .addTo(map);
         bunkeringPopup = createImagePopup(
@@ -971,8 +999,9 @@ function animateChapter9(map, chapterConfig) {
             if (lightMkr2Shown) return;
             lightMkr2Shown = true;
             
+            // SVG points right (3 o'clock), 11 o'clock = -120°
             const lightEl2 = createLightMarker('assets/svg/lightdetection.svg');
-            lightMkr2 = new mapboxgl.Marker({ element: lightEl2, anchor: 'center' })
+            lightMkr2 = new mapboxgl.Marker({ element: lightEl2, anchor: 'center', rotation: -120 })
                 .setLngLat(CONFIG.LIGHT_MKR_2)
                 .addTo(map);
             lightPopup2 = createImagePopup(
@@ -995,8 +1024,9 @@ function animateChapter9(map, chapterConfig) {
             lightMkr3Shown = true;
             
             // Primary light marker with white tint glow
+            // SVG points right (3 o'clock), 1 o'clock = -60°
             const lightEl3 = createLightMarkerPrimary('assets/svg/lightdetection.svg');
-            lightMkr3 = new mapboxgl.Marker({ element: lightEl3, anchor: 'center' })
+            lightMkr3 = new mapboxgl.Marker({ element: lightEl3, anchor: 'center', rotation: -60 })
                 .setLngLat(CONFIG.LIGHT_MKR_3)
                 .addTo(map);
             
@@ -1139,10 +1169,11 @@ function animateChapter9(map, chapterConfig) {
         progress = idx;
 
         // Light Detection 2: Gulf of Tonkin (~60% through track)
+        // SVG points right (3 o'clock), 11 o'clock = -120°
         if (!lightMkr2Shown && pct >= 0.60) {
             lightMkr2Shown = true;
             const lightEl2 = createLightMarker('assets/svg/lightdetection.svg');
-            lightMkr2 = new mapboxgl.Marker({ element: lightEl2, anchor: 'center' })
+            lightMkr2 = new mapboxgl.Marker({ element: lightEl2, anchor: 'center', rotation: -120 })
                 .setLngLat(CONFIG.LIGHT_MKR_2)
                 .addTo(map);
             lightPopup2 = createImagePopup(
@@ -1160,12 +1191,13 @@ function animateChapter9(map, chapterConfig) {
         }
 
         // Light Detection 3: Beihai (~90% through track) - WHITE TINT ATTENTION
+        // SVG points right (3 o'clock), 1 o'clock = -60°
         if (!lightMkr3Shown && pct >= 0.90) {
             lightMkr3Shown = true;
             
             // Primary light marker with white tint glow
             const lightEl3 = createLightMarkerPrimary('assets/svg/lightdetection.svg');
-            lightMkr3 = new mapboxgl.Marker({ element: lightEl3, anchor: 'center' })
+            lightMkr3 = new mapboxgl.Marker({ element: lightEl3, anchor: 'center', rotation: -60 })
                 .setLngLat(CONFIG.LIGHT_MKR_3)
                 .addTo(map);
             
@@ -1203,7 +1235,7 @@ function animateChapter9(map, chapterConfig) {
             // Ensure all markers are shown at completion (fallback)
             if (!lightMkr2Shown) {
                 const lightEl2 = createLightMarker('assets/svg/lightdetection.svg');
-                lightMkr2 = new mapboxgl.Marker({ element: lightEl2, anchor: 'center' })
+                lightMkr2 = new mapboxgl.Marker({ element: lightEl2, anchor: 'center', rotation: -120 })
                     .setLngLat(CONFIG.LIGHT_MKR_2)
                     .addTo(map);
                 lightPopup2 = createImagePopup(
@@ -1220,8 +1252,8 @@ function animateChapter9(map, chapterConfig) {
             }
 
             if (!lightMkr3Shown) {
-                const lightEl3 = createLightMarker('assets/svg/lightdetection.svg');
-                lightMkr3 = new mapboxgl.Marker({ element: lightEl3, anchor: 'center' })
+                const lightEl3 = createLightMarkerPrimary('assets/svg/lightdetection.svg');
+                lightMkr3 = new mapboxgl.Marker({ element: lightEl3, anchor: 'center', rotation: -60 })
                     .setLngLat(CONFIG.LIGHT_MKR_3)
                     .addTo(map);
                 lightPopup3 = createImagePopup(

@@ -689,8 +689,9 @@ function animateChapter5(map, chapterConfig) {
             // Show Russia markers (dark + unattr) during pause with slight stagger
             if (!russiaMarkersShown && pauseElapsed > 200) {
                 // Dark detection marker + popup
+                // SVG points right (3 o'clock), 12:05 = -87.5°
                 const darkEl = createDarkMarker(CONFIG.SVG_DARK);
-                darkDetMkr = new mapboxgl.Marker({ element: darkEl, anchor: 'center' })
+                darkDetMkr = new mapboxgl.Marker({ element: darkEl, anchor: 'center', rotation: -87.5 })
                     .setLngLat(DARK_DET.COORDS)
                     .addTo(map);
 
@@ -711,8 +712,9 @@ function animateChapter5(map, chapterConfig) {
                 // Unattributed marker + popup (slight delay after dark)
                 setTimeout(() => {
                     if (!unattrDetMkr) {
+                        // SVG points right (3 o'clock), 2 o'clock = -30°
                         const unattrEl = createUnattrMarker(CONFIG.SVG_UNATTR);
-                        unattrDetMkr = new mapboxgl.Marker({ element: unattrEl, anchor: 'center' })
+                        unattrDetMkr = new mapboxgl.Marker({ element: unattrEl, anchor: 'center', rotation: -30 })
                             .setLngLat(UNATTR_DET.COORDS)
                             .addTo(map);
 
@@ -767,9 +769,10 @@ function animateChapter5(map, chapterConfig) {
             const mainPct = progress / (total - 1);
 
             // === LIGHT DETECTION (first, at Baltic Sea) ===
+            // SVG points right (3 o'clock), 1 o'clock = -60°
             if (mainPct >= PCT_LIGHT && !lightDetMkr) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                lightDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                lightDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: -60 })
                     .setLngLat(LIGHT_DET.COORDS)
                     .addTo(map);
 
@@ -804,9 +807,10 @@ function animateChapter5(map, chapterConfig) {
             }
 
             // === FINAL LIGHT DETECTION (on return journey) ===
+            // SVG points right (3 o'clock), 1 o'clock = -60°
             if (mainPct >= PCT_LIGHT_FINAL && !lightDetFinalMkr) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                lightDetFinalMkr = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                lightDetFinalMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: -60 })
                     .setLngLat(LIGHT_DET_FINAL.COORDS)
                     .addTo(map);
 
@@ -839,7 +843,7 @@ function animateChapter5(map, chapterConfig) {
             // Ensure all markers exist (fallback if not created during animation)
             if (!lightDetMkr) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                lightDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat(LIGHT_DET.COORDS).addTo(map);
+                lightDetMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: -60 }).setLngLat(LIGHT_DET.COORDS).addTo(map);
                 lightDetPopup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'ch5-pop', offset: LIGHT_DET.IMG_OFFSET })
                     .setLngLat(LIGHT_DET.COORDS).setHTML(`<div class="ch5-light-img-holder"><img class="ch5-light-img" src="${LIGHT_DET.IMAGE}"></div>`).addTo(map);
             }
@@ -851,7 +855,7 @@ function animateChapter5(map, chapterConfig) {
 
             if (!darkDetMkr) {
                 const darkEl = createDarkMarker(CONFIG.SVG_DARK);
-                darkDetMkr = new mapboxgl.Marker({ element: darkEl, anchor: 'center' }).setLngLat(DARK_DET.COORDS).addTo(map);
+                darkDetMkr = new mapboxgl.Marker({ element: darkEl, anchor: 'center', rotation: -87.5 }).setLngLat(DARK_DET.COORDS).addTo(map);
             }
             if (!darkDetPopup) {
                 darkDetPopup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'ch5-pop', offset: DARK_DET.IMG_OFFSET })
@@ -862,7 +866,7 @@ function animateChapter5(map, chapterConfig) {
 
             if (!unattrDetMkr) {
                 const unattrEl = createUnattrMarker(CONFIG.SVG_UNATTR);
-                unattrDetMkr = new mapboxgl.Marker({ element: unattrEl, anchor: 'center' }).setLngLat(UNATTR_DET.COORDS).addTo(map);
+                unattrDetMkr = new mapboxgl.Marker({ element: unattrEl, anchor: 'center', rotation: -30 }).setLngLat(UNATTR_DET.COORDS).addTo(map);
             }
             if (!unattrDetPopup) {
                 unattrDetPopup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'ch5-pop', offset: UNATTR_DET.IMG_OFFSET })
@@ -873,7 +877,7 @@ function animateChapter5(map, chapterConfig) {
 
             if (!lightDetFinalMkr) {
                 const el = createLightMarker(CONFIG.SVG_LIGHT);
-                lightDetFinalMkr = new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat(LIGHT_DET_FINAL.COORDS).addTo(map);
+                lightDetFinalMkr = new mapboxgl.Marker({ element: el, anchor: 'center', rotation: -60 }).setLngLat(LIGHT_DET_FINAL.COORDS).addTo(map);
                 lightDetFinalPopup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'ch5-pop', offset: LIGHT_DET_FINAL.IMG_OFFSET })
                     .setLngLat(LIGHT_DET_FINAL.COORDS).setHTML(`<div class="ch5-light-final-img-holder"><img class="ch5-light-final-img" src="${LIGHT_DET_FINAL.IMAGE}"></div>`).addTo(map);
             }
