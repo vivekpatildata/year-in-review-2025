@@ -89,7 +89,7 @@
       ============================================ */
    
    // Mapbox access token
-   const MAPBOX_TOKEN = 'pk.eyJ1Ijoidml2ZWtwYXRpbDE3IiwiYSI6ImNtOTBhc2E1ZTA1cTEyanBxaWJ0M2NkOTcifQ.hkIZBo-Qa-U651UubO87fw';
+   const MAPBOX_TOKEN = '';
    
    // Map style
    const MAP_STYLE = 'mapbox://styles/vivekpatil17/cmlfm4wke005101ql8ss514dh';
