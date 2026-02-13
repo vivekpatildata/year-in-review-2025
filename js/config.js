@@ -17,7 +17,7 @@
    const API_CONFIG = {
        // Mapbox
        mapbox: {
-           accessToken: 'pk.eyJ1Ijoidml2ZWtwYXRpbDE3IiwiYSI6ImNtOTBhc2E1ZTA1cTEyanBxaWJ0M2NkOTcifQ.hkIZBo-Qa-U651UubO87fw',
+           accessToken: '',
            style: 'mapbox://styles/vivekpatil17/cmk2wc0ze007701s58d7q9kgl',
            // Alternative styles
            styles: {
