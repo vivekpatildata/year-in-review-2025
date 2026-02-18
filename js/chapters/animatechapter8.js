@@ -39,7 +39,7 @@ function animateChapter8(map, chapterConfig) {
 
     // MARKER 1: Irving Reef (29th-31st July) - Philippines administered
     const MARKER_1 = {
-        COORDS: [114.8876, 10.8559],     // [lng, lat]
+        COORDS: [114.935, 10.883333],    // [lng, lat] - matches AIS track point
         IMAGE: 'images/chapter8/chapter8A.png',
         IMG_WIDTH: 180,
         IMG_HEIGHT: 180,
@@ -49,7 +49,7 @@ function animateChapter8(map, chapterConfig) {
 
     // MARKER 2: Subi Reef (31st July-3rd August) - Chinese artificial island
     const MARKER_2 = {
-        COORDS: [114.0764, 10.9216],     // [lng, lat]
+        COORDS: [114.078333, 10.92],     // [lng, lat] - matches AIS track point
         IMAGE: 'images/chapter8/chapter8B.png',
         IMG_WIDTH: 180,
         IMG_HEIGHT: 180,
@@ -59,7 +59,7 @@ function animateChapter8(map, chapterConfig) {
 
     // MARKER 3: North Gaven Reef (3rd-4th August) - Tizard Bank area
     const MARKER_3 = {
-        COORDS: [114.2412, 10.2000],     // [lng, lat]
+        COORDS: [114.238333, 10.2],      // [lng, lat] - matches AIS track point
         IMAGE: 'images/chapter8/chapter8C.png',
         IMG_WIDTH: 180,
         IMG_HEIGHT: 180,
@@ -69,7 +69,7 @@ function animateChapter8(map, chapterConfig) {
 
     // MARKER 4: Mischief Reef (5th-8th August) - 3,000m runway
     const MARKER_4 = {
-        COORDS: [115.5427, 9.9100],      // [lng, lat]
+        COORDS: [115.535, 9.901667],     // [lng, lat] - matches AIS track point
         IMAGE: 'images/chapter8/chapter8D.png',
         IMG_WIDTH: 180,
         IMG_HEIGHT: 180,
@@ -79,7 +79,7 @@ function animateChapter8(map, chapterConfig) {
 
     // MARKER 5: Union Banks (4th-8th August) - Large atoll formation
     const MARKER_5 = {
-        COORDS: [114.2856, 9.7508],      // [lng, lat]
+        COORDS: [114.283333, 9.75],      // [lng, lat] - matches AIS track point
         IMAGE: 'images/chapter8/chapter8E.png',
         IMG_WIDTH: 180,
         IMG_HEIGHT: 180,
@@ -87,9 +87,9 @@ function animateChapter8(map, chapterConfig) {
         LABEL: 'Union Banks'
     };
 
-    // MARKER 6: Northwest Investigator Reef / Fiery Cross (10th-16th August)
+    // MARKER 6: Fiery Cross Reef (10th-16th August)
     const MARKER_6 = {
-        COORDS: [112.9946, 9.6441],      // [lng, lat]
+        COORDS: [112.895, 9.553333],     // [lng, lat] - matches AIS track point
         IMAGE: 'images/chapter8/chapter8F.png',
         IMG_WIDTH: 180,
         IMG_HEIGHT: 180,

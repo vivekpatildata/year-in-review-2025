@@ -513,8 +513,18 @@ function animateChapter2(map, chapterConfig) {
     function addBaileyBridge() {
         console.log('  -> Adding Bailey Bridge');
 
-        // Create LineString connecting all three barges
-        const bridgeCoords = AOI2.BARGES.map(b => [b.lng, b.lat]);
+        // Create LineString connecting all three barges, extended beyond edges
+        const barges = AOI2.BARGES;
+        const first = barges[0];
+        const second = barges[1];
+        const secondLast = barges[barges.length - 2];
+        const last = barges[barges.length - 1];
+        const ext = 0.008;
+        const startExt = [first.lng - (second.lng - first.lng) / Math.hypot(second.lng - first.lng, second.lat - first.lat) * ext,
+                          first.lat - (second.lat - first.lat) / Math.hypot(second.lng - first.lng, second.lat - first.lat) * ext];
+        const endExt = [last.lng + (last.lng - secondLast.lng) / Math.hypot(last.lng - secondLast.lng, last.lat - secondLast.lat) * ext,
+                        last.lat + (last.lat - secondLast.lat) / Math.hypot(last.lng - secondLast.lng, last.lat - secondLast.lat) * ext];
+        const bridgeCoords = [startExt, ...barges.map(b => [b.lng, b.lat]), endExt];
 
         // Remove existing bridge layers if present
         try { if (map.getLayer(LYR_BRIDGE_GLOW)) map.removeLayer(LYR_BRIDGE_GLOW); } catch(e) {}
@@ -531,20 +541,20 @@ function animateChapter2(map, chapterConfig) {
             }
         });
 
-        // Glow layer - wide white blur
+        // Outer glow
         map.addLayer({
             id: LYR_BRIDGE_GLOW,
             type: 'line',
             source: SRC_BRIDGE,
             paint: {
                 'line-color': COLORS.BRIDGE_COLOR,
-                'line-width': 18,
-                'line-opacity': 0.25,
-                'line-blur': 10
+                'line-width': 12,
+                'line-opacity': 0.35,
+                'line-blur': 4
             }
         });
 
-        // Main bridge line - solid white with rounded caps
+        // Main bridge line - thin white
         map.addLayer({
             id: LYR_BRIDGE,
             type: 'line',
@@ -555,8 +565,8 @@ function animateChapter2(map, chapterConfig) {
             },
             paint: {
                 'line-color': COLORS.BRIDGE_COLOR,
-                'line-width': 4,
-                'line-opacity': 0.9
+                'line-width': 3,
+                'line-opacity': 1
             }
         });
 
@@ -725,10 +735,10 @@ function animateChapter2(map, chapterConfig) {
         console.log('  -> Showing barge markers and Bailey Bridge');
 
         // Create 3 barge markers with WHITE glow (dock formation)
+        // SVG points right (3 o'clock), 10 o'clock = -150° CSS rotation
         AOI2.BARGES.forEach((barge, index) => {
-            // Stagger the marker appearance
             setTimeout(() => {
-                const marker = createSVGMarker(barge.lng, barge.lat, 0, true);
+                const marker = createSVGMarker(barge.lng, barge.lat, -150, true);
                 aoi2Markers.push(marker);
             }, index * 200);
         });

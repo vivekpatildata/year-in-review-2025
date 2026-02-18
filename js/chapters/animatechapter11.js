@@ -1704,7 +1704,7 @@ function animateChapter11(map, chapterConfig) {
     function showDetection1() {
         console.log('  Detection 1: Dark detection at Jask, Iran');
 
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker', 17.5);
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker', 30);
         const numMkr = createNumberMarker('1', CONFIG.DET_1);
         const popup = createImagePopup(
             CONFIG.DET_1,
@@ -1777,7 +1777,7 @@ function animateChapter11(map, chapterConfig) {
     function showDetection4() {
         console.log('  Detection 4: Light detection with sat image');
 
-        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_4, 'ch11-light-marker', -90);
+        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_4, 'ch11-light-marker', -47.5);
         const numMkr = createNumberMarker('4', CONFIG.DET_4);
         const popup = createImagePopup(
             CONFIG.DET_4,
@@ -1849,7 +1849,7 @@ function animateChapter11(map, chapterConfig) {
     function showDetection5() {
         console.log('  Detection 5: Light detection near Jiangsu, China');
 
-        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_5, 'ch11-light-marker', -90);
+        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_5, 'ch11-light-marker', -105);
         const numMkr = createNumberMarker('5', CONFIG.DET_5);
         const popup = createImagePopup(
             CONFIG.DET_5,

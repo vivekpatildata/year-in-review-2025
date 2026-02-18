@@ -72,6 +72,7 @@ function animateChapter1(map, chapterConfig) {
     let stsPopup = null;
     let darkMkrs = [];
     let galPopup = null;
+    let aisOffPopup = null;
 
     // ============================================================================
     // INJECT STYLES
@@ -145,6 +146,102 @@ function animateChapter1(map, chapterConfig) {
                             drop-shadow(0 0 25px rgba(255, 165, 0, 0.8))
                             drop-shadow(0 0 40px rgba(255, 165, 0, 0.4));
                 }
+            }
+
+            /* === AIS OFF ANNOTATION (glassmorphic popup at last AIS point) === */
+            .ch1-ais-off-popup .mapboxgl-popup-tip { display: none !important; }
+            .ch1-ais-off-popup .mapboxgl-popup-content {
+                padding: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .ch1-ais-off-content {
+                background: linear-gradient(
+                    145deg,
+                    rgba(14, 20, 32, 0.38) 0%,
+                    rgba(8, 12, 22, 0.45) 100%
+                );
+                backdrop-filter: blur(36px) saturate(190%);
+                -webkit-backdrop-filter: blur(36px) saturate(190%);
+                border-radius: 10px;
+                padding: 12px 16px;
+                font-family: 'Inter', sans-serif;
+                min-width: 200px;
+                max-width: 260px;
+                line-height: 1.5;
+                border: 1px solid rgba(255, 59, 48, 0.25);
+                box-shadow:
+                    0 8px 32px rgba(0, 0, 0, 0.35),
+                    0 2px 8px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+                    0 0 25px rgba(255, 59, 48, 0.05);
+            }
+            .ch1-ais-off-row {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .ch1-ais-off-icon {
+                flex-shrink: 0;
+                width: 32px;
+                height: 32px;
+                background: rgba(255, 59, 48, 0.12);
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .ch1-ais-off-icon svg {
+                width: 16px;
+                height: 16px;
+                color: #ff3b30;
+            }
+            .ch1-ais-off-title {
+                font-size: 11px;
+                font-weight: 600;
+                color: rgba(255, 255, 255, 0.5);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 3px;
+            }
+            .ch1-ais-off-text {
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.9);
+                line-height: 1.5;
+                font-weight: 400;
+            }
+            .ch1-ais-off-text .highlight-red {
+                color: #ff3b30;
+                font-weight: 600;
+            }
+
+            @media (max-width: 768px) {
+                .ch1-ais-off-content {
+                    min-width: 170px;
+                    max-width: 220px;
+                    padding: 10px 12px;
+                    backdrop-filter: blur(28px) saturate(170%);
+                    -webkit-backdrop-filter: blur(28px) saturate(170%);
+                }
+                .ch1-ais-off-icon { width: 26px; height: 26px; }
+                .ch1-ais-off-icon svg { width: 13px; height: 13px; }
+                .ch1-ais-off-title { font-size: 9px; }
+                .ch1-ais-off-text { font-size: 11px; }
+            }
+
+            @media (max-width: 480px) {
+                .ch1-ais-off-content {
+                    min-width: 150px;
+                    max-width: 190px;
+                    padding: 8px 10px;
+                    border-radius: 8px;
+                }
+                .ch1-ais-off-icon { width: 24px; height: 24px; border-radius: 5px; }
+                .ch1-ais-off-icon svg { width: 12px; height: 12px; }
+                .ch1-ais-off-title { font-size: 8px; }
+                .ch1-ais-off-text { font-size: 10px; }
             }
 
             /* === POPUP BASE === */
@@ -336,18 +433,17 @@ function animateChapter1(map, chapterConfig) {
         darkMkrs.forEach(m => m.remove());
         darkMkrs = [];
         if (galPopup) { galPopup.remove(); galPopup = null; }
+        if (aisOffPopup) { aisOffPopup.remove(); aisOffPopup = null; }
     }
 
     // Comprehensive cleanup of detection markers and popups only (keeps path)
     function clearDetectionsAndPopups() {
-        // Clear STS marker and popup
         if (stsMkr) { stsMkr.remove(); stsMkr = null; }
         if (stsPopup) { stsPopup.remove(); stsPopup = null; }
-        // Clear dark detection markers
         darkMkrs.forEach(m => m.remove());
         darkMkrs = [];
-        // Clear gallery popup
         if (galPopup) { galPopup.remove(); galPopup = null; }
+        if (aisOffPopup) { aisOffPopup.remove(); aisOffPopup = null; }
     }
 
     function stopAnim() {
@@ -360,6 +456,36 @@ function animateChapter1(map, chapterConfig) {
         clearMarkers();
         clearLayers();
         progress = 0;
+    }
+
+    function createAisOffAnnotation(lngLat) {
+        return new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            className: 'ch1-ais-off-popup',
+            offset: [20, -40],
+            anchor: 'left'
+        })
+            .setLngLat(lngLat)
+            .setHTML(`
+                <div class="ch1-ais-off-content">
+                    <div class="ch1-ais-off-row">
+                        <div class="ch1-ais-off-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                            </svg>
+                        </div>
+                        <div class="ch1-ais-off-body">
+                            <div class="ch1-ais-off-title">AIS Turned Off</div>
+                            <div class="ch1-ais-off-text">
+                                <span class="highlight-red">24 Dec 2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `)
+            .addTo(map);
     }
 
     // Create SVG marker element - light detection (blue glow)
@@ -512,6 +638,12 @@ function animateChapter1(map, chapterConfig) {
             }
             if (vesselMkr) vesselMkr.setLngLat(coords[total - 1]);
             running = false;
+
+            // Show AIS Off annotation at last point
+            if (!aisOffPopup) {
+                aisOffPopup = createAisOffAnnotation(coords[total - 1]);
+            }
+
             console.log('  ✓ Path complete');
         }
     }
@@ -533,15 +665,14 @@ function animateChapter1(map, chapterConfig) {
         if (galPopup) { galPopup.remove(); galPopup = null; }
 
         // Create 4 dark detection markers (yellow glow, no ring) using external SVG
-        // SVG default points right (3 o'clock), so subtract 90° from clock angle
-        // Det1=5:00(60°), Det2=6:00(90°), Det3=6:30(105°), Det4=6:30(105°)
+        // Det1=11:00(-120°), Det2=12:00(-90°), Det3=1:00(-60°), Det4=1:00(-60°)
         const darkCoords = [
             CONFIG.DARK_DET_1,
             CONFIG.DARK_DET_2,
             CONFIG.DARK_DET_3,
             CONFIG.DARK_DET_4
         ];
-        const darkRotations = [60, 90, 105, 105];
+        const darkRotations = [-120, -90, -60, -60];
 
         darkCoords.forEach((coord, i) => {
             const el = createDarkMarker(CONFIG.SVG_DARK);
@@ -625,15 +756,14 @@ function animateChapter1(map, chapterConfig) {
         if (galPopup) { galPopup.remove(); galPopup = null; }
 
         // Create 4 dark detection markers (yellow glow, no ring) using external SVG
-        // SVG default points right (3 o'clock), so subtract 90° from clock angle
-        // Det1=5:00(60°), Det2=6:00(90°), Det3=6:30(105°), Det4=6:30(105°)
+        // Det1=11:00(-120°), Det2=12:00(-90°), Det3=1:00(-60°), Det4=1:00(-60°)
         const darkCoords = [
             CONFIG.DARK_DET_1,
             CONFIG.DARK_DET_2,
             CONFIG.DARK_DET_3,
             CONFIG.DARK_DET_4
         ];
-        const darkRotations = [60, 90, 105, 105];
+        const darkRotations = [-120, -90, -60, -60];
 
         darkCoords.forEach((coord, i) => {
             const el = createDarkMarker(CONFIG.SVG_DARK);
@@ -661,6 +791,12 @@ function animateChapter1(map, chapterConfig) {
             .setLngLat(CONFIG.DARK_DET_1)
             .setHTML(`<div class="ch1-gal">${imgs}</div>`)
             .addTo(map);
+
+        // AIS Off annotation at last AIS point
+        if (coords && coords.length > 1) {
+            if (aisOffPopup) { aisOffPopup.remove(); aisOffPopup = null; }
+            aisOffPopup = createAisOffAnnotation(coords[coords.length - 1]);
+        }
 
         console.log('  ✓ Gallery shown with path preserved');
     }

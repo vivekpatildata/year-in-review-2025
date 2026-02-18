@@ -905,17 +905,19 @@ function animateChapter3(map, chapterConfig) {
             const h1Pct = (progress - mainEndIndex) / remainingPoints;
 
             // Detection 1 - Around 20% of H1 track (Indian Ocean)
+            // SVG points right (3 o'clock), 4 o'clock = 30°
             if (h1Pct >= 0.2 && !h1Mkr1) {
                 const el1 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center' })
+                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center', rotation: 30 })
                     .setLngLat([H1_MARKERS.DETECTION_1.lng, H1_MARKERS.DETECTION_1.lat])
                     .addTo(map);
             }
 
             // Detection 2 - Around 55% of H1 track (Near Singapore)
+            // SVG points right (3 o'clock), 4 o'clock = 30°
             if (h1Pct >= 0.55 && !h1Mkr2) {
                 const el2 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center' })
+                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center', rotation: 30 })
                     .setLngLat([H1_MARKERS.DETECTION_2.lng, H1_MARKERS.DETECTION_2.lat])
                     .addTo(map);
             }
@@ -958,13 +960,13 @@ function animateChapter3(map, chapterConfig) {
             // Ensure all markers are placed at their exact coordinates
             if (!h1Mkr1) {
                 const el1 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center' })
+                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center', rotation: 30 })
                     .setLngLat([H1_MARKERS.DETECTION_1.lng, H1_MARKERS.DETECTION_1.lat])
                     .addTo(map);
             }
             if (!h1Mkr2) {
                 const el2 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center' })
+                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center', rotation: 30 })
                     .setLngLat([H1_MARKERS.DETECTION_2.lng, H1_MARKERS.DETECTION_2.lat])
                     .addTo(map);
             }

@@ -816,7 +816,7 @@ function animateChapter9(map, chapterConfig) {
         // Create bunkering marker immediately (Koryak FSU - Ship-to-Ship transfer)
         // Bunkering SVG is square, default 12 o'clock. 7 o'clock = 210°
         const bunkeringEl = createBunkeringMarker('assets/svg/bunkering.svg');
-        bunkeringMkr = new mapboxgl.Marker({ element: bunkeringEl, anchor: 'center', rotation: 210 })
+        bunkeringMkr = new mapboxgl.Marker({ element: bunkeringEl, anchor: 'center', rotation: 225 })
             .setLngLat(CONFIG.BUNKERING_MKR)
             .addTo(map);
         bunkeringPopup = createImagePopup(

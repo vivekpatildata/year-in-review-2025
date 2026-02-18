@@ -132,7 +132,7 @@
            title: 'The Transfer',
            subtitle: 'STS Detection West of Malaysia',
            region: 'Malacca Strait',
-           dateRange: { start: '14 Nov 2024', end: '14 Nov 2024' },
+           dateRange: { start: 'NOV 14, 2024', end: 'FEB 10, 2025' },
            camera: {
                center: [101.917, 2.3433],  // STS location
                zoom: 9.4,
@@ -172,7 +172,7 @@
            title: 'TASCA',
            subtitle: 'Tracking the Shadow Tanker',
            region: 'Malacca Strait → South China Sea',
-           dateRange: { start: '14 Nov 2024', end: '24 Dec 2024' },
+           dateRange: { start: 'NOV 14, 2024', end: 'DEC 24, 2024' },
            camera: {
                center: [102.803, 2.083],
                zoom: 7.38,
@@ -207,7 +207,7 @@
            title: 'Caught Painting',
            subtitle: 'Identity Evasion Detected',
            region: 'South China Sea',
-           dateRange: { start: '01 Jan 2025', end: '10 Feb 2025' },
+           dateRange: { start: 'JAN 01, 2025', end: 'FEB 10, 2025' },
            camera: {
                center: [104.7135, 2.0003],
                zoom: 9.21,
@@ -295,7 +295,7 @@
            legend: [
                { type: 'svg', icon: 'assets/svg/unattributed.svg', label: 'Barge Position' },
                { type: 'line', color: '#ffffff', label: 'Bailey Bridge' },
-               { type: 'line', color: '#E8A0A0', label: 'Assessed Course' },
+               { type: 'line', color: '#E8A0A0', label: 'Assessed Course', style: 'dotted' },
                { type: 'area', color: '#ffaa00', label: 'Area of Interest' }
            ],
            vesselInfo: {
@@ -541,7 +541,7 @@
            title: 'ETERNITY C',
            subtitle: 'Houthi Attack → Vessel Sunk',
            region: 'Red Sea, Gulf of Aden',
-           dateRange: { start: 'JUN 30, 2025', end: 'JUL 09, 2025' },
+           dateRange: { start: 'JUN 25, 2025', end: 'JUL 09, 2025' },
            hideChapterInfo: true,
            camera: {
                center: [31.88, 24.14],
@@ -577,7 +577,7 @@
            title: 'MATROS SHEVCHENKO',
            subtitle: 'Crimea to Egypt Dark Transit',
            region: 'Black Sea to Mediterranean',
-           dateRange: { start: 'JUL 20, 2025', end: 'SEP 17, 2025' },
+           dateRange: { start: 'JUL 19, 2025', end: 'SEP 17, 2025' },
            hideChapterInfo: true,
            // SPLIT SCREEN CONFIG
            splitScreen: true,
@@ -684,7 +684,7 @@
                    name: 'ARCTIC VOSTOK',
                    imo: '9216298',
                    cargo: 'LNG',
-                   operation: 'OFAC SANCTIONED'
+                   operation: 'STS TRANSFER'
                }
            },
            dataFile: 'data/chapter9-arcticvostok.geojson',
@@ -721,8 +721,8 @@
                vessel1: {
                    name: 'ARCTIC VOSTOK',
                    imo: '9216298',
-                   cargo: 'LNG CARGO',
-                   operation: '7TH SANCTIONED'
+                   cargo: 'LNG',
+                   operation: '7TH SANCTIONED LNG AT BEIHAI'
                }
            },
            dataFile: null,
@@ -828,7 +828,7 @@
                { type: 'line', color: '#00ff88', label: 'DUNE Assessed Path', style: 'dotted' },
                { type: 'line', color: '#6cb4ee', label: 'STELLAR ORACLE (KSECOND) Track' },
                { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
-               { type: 'svg', icon: 'assets/svg/bunkering.svg', label: 'STS Detection' }
+               { type: 'svg', icon: 'assets/svg/bunkering.svg', label: 'AIS Light STS Detection' }
            ],
            vesselInfo: {
                vessel1: {
@@ -841,7 +841,7 @@
                    name: 'STELLAR ORACLE',
                    imo: '9194127',
                    cargo: 'CRUDE OIL',
-                   operation: 'AS KSECOND'
+                   operation: 'SPOOFING AS KSECOND'
                }
            },
            dataFile: 'data/chapter11-dune.geojson',
@@ -870,7 +870,6 @@
            layers: [],
           legend: [
               { type: 'line', color: '#00ff88', label: 'DUNE AIS Track' },
-              { type: 'line', color: '#00ff88', label: 'DUNE Assessed Path', style: 'dotted' },
               { type: 'line', color: '#6cb4ee', label: 'STELLAR ORACLE (KSECOND) Track' },
               { type: 'line', color: '#a78bfa', label: 'STELLAR ORACLE (SINCON) Track' },
               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
@@ -881,7 +880,7 @@
                   name: 'STELLAR ORACLE',
                   imo: '9194127',
                   cargo: 'CRUDE OIL',
-                  operation: 'AS SINCON'
+                  operation: 'SPOOFING AS SINCON'
               }
           },
           dataFile: 'data/chapter11-sincon.geojson',
@@ -2260,12 +2259,82 @@
                return;
            }
            
+           // Special handling for may: place marker in Baltic Sea (not on Swedish land)
+           if (STATE.currentChapter === 'may') {
+               STATE.miniMarker.setLngLat([28.5, 59.8]);  // Gulf of Finland near Ust-Luga
+               STATE.miniMap.jumpTo({
+                   center: [24, 58],
+                   zoom: 2.5
+               });
+               return;
+           }
+           
+           // Special handling for march-h1: show full Iran-to-Vietnam transit
+           if (STATE.currentChapter === 'march-h1') {
+               STATE.miniMarker.setLngLat([107.0, 20.9]);  // Marker at Ha Long Bay, Vietnam
+               STATE.miniMap.jumpTo({
+                   center: [85, 15],       // Centered on Indian Ocean — shows Iran + Vietnam
+                   zoom: 0.8
+               });
+               return;
+           }
+           
            // Special handling for april-h1: show full Iran-to-Mozambique corridor
            if (STATE.currentChapter === 'april-h1') {
                STATE.miniMarker.setLngLat([34.82, -19.87]);  // Marker at Beira, Mozambique
                STATE.miniMap.jumpTo({
-                   center: [46, 5],       // Centered on Indian Ocean — shows Gulf of Oman + Mozambique
-                   zoom: 0.5              // Zoomed out to show full corridor
+                   center: [50, -5],       // Centered on East Africa/Indian Ocean
+                   zoom: 0.8
+               });
+               return;
+           }
+           
+           // Special handling for july: Black Sea to Mediterranean transit
+           if (STATE.currentChapter === 'july') {
+               STATE.miniMarker.setLngLat([34.0, 43.5]);  // Black Sea (water)
+               STATE.miniMap.jumpTo({
+                   center: [32, 40],
+                   zoom: 2.5
+               });
+               return;
+           }
+           
+           // Special handling for october: Irish Sea / Bay of Biscay
+           if (STATE.currentChapter === 'october') {
+               STATE.miniMarker.setLngLat([-4.4, 53.7]);  // Irish Sea (water)
+               STATE.miniMap.jumpTo({
+                   center: [-4, 52],
+                   zoom: 3.0
+               });
+               return;
+           }
+           
+           // Special handling for november: main scroll at Jask, Iran
+           if (STATE.currentChapter === 'november') {
+               STATE.miniMarker.setLngLat([58.9, 25.3]);  // Gulf of Oman near Jask (water)
+               STATE.miniMap.jumpTo({
+                   center: [65, 15],
+                   zoom: 1.5
+               });
+               return;
+           }
+           
+           // Special handling for november-h1: STS in South China Sea
+           if (STATE.currentChapter === 'november-h1') {
+               STATE.miniMarker.setLngLat([104.74, 2.02]);  // STS location (water)
+               STATE.miniMap.jumpTo({
+                   center: [108, 5],
+                   zoom: 2.5
+               });
+               return;
+           }
+           
+           // Special handling for november-h2: Taiwan to Yellow Sea
+           if (STATE.currentChapter === 'november-h2') {
+               STATE.miniMarker.setLngLat([122.1, 22.5]);  // Near Taiwan (water)
+               STATE.miniMap.jumpTo({
+                   center: [118, 28],
+                   zoom: 2.5
                });
                return;
            }
@@ -3143,7 +3212,12 @@
            if (item.type === 'line') {
                const line = document.createElement('div');
                line.className = 'legend-line';
-               line.style.background = item.color;
+               if (item.style === 'dotted') {
+                   line.style.background = `repeating-linear-gradient(90deg, ${item.color} 0px, ${item.color} 3px, transparent 3px, transparent 6px)`;
+                   line.style.height = '2px';
+               } else {
+                   line.style.background = item.color;
+               }
                iconEl.appendChild(line);
            } else if (item.type === 'dot') {
                const dot = document.createElement('div');
