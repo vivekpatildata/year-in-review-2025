@@ -207,7 +207,7 @@
            title: 'Caught Painting',
            subtitle: 'Identity Evasion Detected',
            region: 'South China Sea',
-           dateRange: { start: 'JAN 01, 2025', end: 'FEB 10, 2025' },
+           dateRange: { start: 'DEC 29, 2024', end: 'FEB 10, 2025' },
            camera: {
                center: [104.7135, 2.0003],
                zoom: 9.21,
@@ -376,7 +376,7 @@
                vessel1: {
                    name: 'OCEANA ROSE',
                    imo: '9293966',
-                   cargo: 'WHITE AGGREGATE',
+                   cargo: 'LOOSE CARGO',
                    operation: '37D AIS SPOOF'
                }
            },
@@ -415,7 +415,7 @@
                vessel1: {
                    name: 'OCEANA ROSE',
                    imo: '9293966',
-                   cargo: 'WHITE AGGREGATE',
+                   cargo: 'LOOSE CARGO',
                    operation: 'BARGE TRANSFER'
                }
            },

@@ -7,7 +7,7 @@
    - After 3 seconds: Timeline slides UP, only tracking period stays visible
    - Tracking period is always visible (compact bar at top)
    - Smooth slide animations for elegant UX
-   - Works on visibility change (tab switching, minimize)
+   - Dynamic prologue: Chapter 1 shows NOV/DEC 2024 within the same bar
    ============================================ */
 
 'use strict';
@@ -18,26 +18,29 @@
 const TIMELINE_CONFIG = {
     year: 2025,
 
-    // Auto-hide timing
-    autoHideDelay: 3000,  // 3 seconds before hiding months
+    autoHideDelay: 3000,
 
-    // Month data - position is left edge of month
-    months: [
-        { id: 'jan', label: 'JAN', fullLabel: 'January', position: 0 },
-        { id: 'feb', label: 'FEB', fullLabel: 'February', position: 8.33 },
-        { id: 'mar', label: 'MAR', fullLabel: 'March', position: 16.67 },
-        { id: 'apr', label: 'APR', fullLabel: 'April', position: 25 },
-        { id: 'may', label: 'MAY', fullLabel: 'May', position: 33.33 },
-        { id: 'jun', label: 'JUN', fullLabel: 'June', position: 41.67 },
-        { id: 'jul', label: 'JUL', fullLabel: 'July', position: 50 },
-        { id: 'aug', label: 'AUG', fullLabel: 'August', position: 58.33 },
-        { id: 'sep', label: 'SEP', fullLabel: 'September', position: 66.67 },
-        { id: 'oct', label: 'OCT', fullLabel: 'October', position: 75 },
-        { id: 'nov', label: 'NOV', fullLabel: 'November', position: 83.33 },
-        { id: 'dec', label: 'DEC', fullLabel: 'December', position: 91.67 }
+    // All possible months (14 total when prologue active, 12 normally)
+    prologueMonths: [
+        { id: 'nov24', label: "NOV '24", fullLabel: 'November 2024', isPrologue: true },
+        { id: 'dec24', label: "DEC '24", fullLabel: 'December 2024', isPrologue: true }
     ],
 
-    // Chapter to month mapping
+    months: [
+        { id: 'jan', label: 'JAN', fullLabel: 'January' },
+        { id: 'feb', label: 'FEB', fullLabel: 'February' },
+        { id: 'mar', label: 'MAR', fullLabel: 'March' },
+        { id: 'apr', label: 'APR', fullLabel: 'April' },
+        { id: 'may', label: 'MAY', fullLabel: 'May' },
+        { id: 'jun', label: 'JUN', fullLabel: 'June' },
+        { id: 'jul', label: 'JUL', fullLabel: 'July' },
+        { id: 'aug', label: 'AUG', fullLabel: 'August' },
+        { id: 'sep', label: 'SEP', fullLabel: 'September' },
+        { id: 'oct', label: 'OCT', fullLabel: 'October' },
+        { id: 'nov', label: 'NOV', fullLabel: 'November' },
+        { id: 'dec', label: 'DEC', fullLabel: 'December' }
+    ],
+
     chapterMonths: {
         intro: null,
         january: 0,
@@ -57,7 +60,6 @@ const TIMELINE_CONFIG = {
         december: 11
     },
 
-    // Animation settings - smoother transitions
     animation: {
         duration: 400,
         easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
@@ -72,16 +74,35 @@ const TIMELINE_STATE = {
     currentMonth: null,
     previousMonth: null,
     isVisible: false,
-    isExpanded: false,  // true = full timeline visible, false = only tracking period
-    notchElements: [],
+    isExpanded: false,
+    isPrologueActive: false,
+    notchElements: [],       // 12 main month notches
+    prologueElements: [],    // 2 prologue notches (NOV '24, DEC '24)
+    yearDividerEl: null,
     indicatorElement: null,
     trackElement: null,
     containerElement: null,
     autoHideTimer: null,
     lastScrollTime: 0,
-    hasOnboarded: false,   // true after first ripple has played
-    hintElement: null      // "click to jump" tooltip
+    hasOnboarded: false,
+    hintElement: null
 };
+
+// Normal positions: 12 months evenly across 0-100%
+function getNormalPositions() {
+    return TIMELINE_CONFIG.months.map((_, i) => (i / 12) * 100);
+}
+
+// Prologue positions: 14 slots, prologue months slightly compressed
+// NOV'24 and DEC'24 get ~6% each, remaining 12 months share ~88%
+function getProloguePositions() {
+    const prologueWidth = 12; // total % for 2 prologue months
+    const mainStart = prologueWidth;
+    const mainSpan = 100 - mainStart;
+    const prologuePos = TIMELINE_CONFIG.prologueMonths.map((_, i) => (i / 2) * prologueWidth);
+    const mainPos = TIMELINE_CONFIG.months.map((_, i) => mainStart + (i / 12) * mainSpan);
+    return { prologuePos, mainPos };
+}
 
 
 /* ============================================
@@ -102,20 +123,14 @@ function initTimeline() {
     TIMELINE_STATE.containerElement = container;
     TIMELINE_STATE.trackElement = trackElement;
 
-    // Clear existing
     trackElement.innerHTML = '';
 
-    // Create elements
     createMonthNotches(trackElement);
     createProgressIndicator(trackElement);
 
-    // Setup click handlers for navigation
     setupTimelineInteraction();
-
-    // Setup visibility change handler (for tab switching/minimize)
     setupVisibilityHandler();
 
-    // Initially hidden - will show on chapter 1
     hideTimeline();
 
     console.log('[TIMELINE] Timeline initialized with', TIMELINE_STATE.notchElements.length, 'months');
@@ -124,13 +139,42 @@ function initTimeline() {
 
 function createMonthNotches(container) {
     TIMELINE_STATE.notchElements = [];
+    TIMELINE_STATE.prologueElements = [];
 
+    // Create prologue notches (hidden by default)
+    TIMELINE_CONFIG.prologueMonths.forEach((month) => {
+        const notch = document.createElement('div');
+        notch.className = 'timeline-notch timeline-prologue-notch';
+        notch.dataset.month = month.id;
+        notch.style.left = '0%';
+        notch.style.opacity = '0';
+        notch.style.pointerEvents = 'none';
+
+        const label = document.createElement('span');
+        label.className = 'timeline-notch-label';
+        label.textContent = month.label;
+        notch.appendChild(label);
+
+        container.appendChild(notch);
+        TIMELINE_STATE.prologueElements.push(notch);
+    });
+
+    // Year divider (hidden by default)
+    const yearDiv = document.createElement('div');
+    yearDiv.className = 'timeline-year-divider';
+    yearDiv.innerHTML = '<span>2025</span>';
+    yearDiv.style.opacity = '0';
+    container.appendChild(yearDiv);
+    TIMELINE_STATE.yearDividerEl = yearDiv;
+
+    // Create main 12 month notches
+    const normalPos = getNormalPositions();
     TIMELINE_CONFIG.months.forEach((month, index) => {
         const notch = document.createElement('div');
         notch.className = 'timeline-notch';
         notch.dataset.month = month.id;
         notch.dataset.index = index;
-        notch.style.left = `${month.position}%`;
+        notch.style.left = `${normalPos[index]}%`;
 
         const label = document.createElement('span');
         label.className = 'timeline-notch-label';
@@ -157,24 +201,85 @@ function createProgressIndicator(container) {
 
 
 /* ============================================
+   DYNAMIC LAYOUT - Prologue Mode
+   ============================================ */
+
+function activatePrologue() {
+    if (TIMELINE_STATE.isPrologueActive) return;
+    TIMELINE_STATE.isPrologueActive = true;
+
+    const { prologuePos, mainPos } = getProloguePositions();
+    const trans = `left 0.5s ${TIMELINE_CONFIG.animation.easing}, opacity 0.4s ease`;
+
+    // Slide main months to make room
+    TIMELINE_STATE.notchElements.forEach((notch, i) => {
+        notch.style.transition = trans;
+        notch.style.left = `${mainPos[i]}%`;
+    });
+
+    // Fade in and position prologue notches
+    TIMELINE_STATE.prologueElements.forEach((notch, i) => {
+        notch.style.transition = trans;
+        notch.style.left = `${prologuePos[i]}%`;
+        notch.style.opacity = '1';
+        notch.style.pointerEvents = 'auto';
+        notch.classList.add('active');
+    });
+
+    // Show year divider between DEC '24 and JAN, centered in the gap
+    if (TIMELINE_STATE.yearDividerEl) {
+        const gapCenter = (prologuePos[1] + mainPos[0]) / 2;
+        TIMELINE_STATE.yearDividerEl.style.transition = `left 0.5s ${TIMELINE_CONFIG.animation.easing}, opacity 0.4s ease 0.2s`;
+        TIMELINE_STATE.yearDividerEl.style.left = `${gapCenter}%`;
+        TIMELINE_STATE.yearDividerEl.style.opacity = '1';
+    }
+}
+
+
+function deactivatePrologue() {
+    if (!TIMELINE_STATE.isPrologueActive) return;
+    TIMELINE_STATE.isPrologueActive = false;
+
+    const normalPos = getNormalPositions();
+    const trans = `left 0.5s ${TIMELINE_CONFIG.animation.easing}, opacity 0.3s ease`;
+
+    // Slide main months back to normal
+    TIMELINE_STATE.notchElements.forEach((notch, i) => {
+        notch.style.transition = trans;
+        notch.style.left = `${normalPos[i]}%`;
+    });
+
+    // Fade out prologue notches
+    TIMELINE_STATE.prologueElements.forEach((notch) => {
+        notch.style.transition = trans;
+        notch.style.opacity = '0';
+        notch.style.pointerEvents = 'none';
+        notch.classList.remove('active');
+    });
+
+    // Hide year divider
+    if (TIMELINE_STATE.yearDividerEl) {
+        TIMELINE_STATE.yearDividerEl.style.transition = `opacity 0.2s ease`;
+        TIMELINE_STATE.yearDividerEl.style.opacity = '0';
+    }
+}
+
+
+/* ============================================
    VISIBILITY CHANGE HANDLER
-   Prevents issues when switching tabs/minimizing
    ============================================ */
 
 function setupVisibilityHandler() {
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
-            // Page is hidden - clear any pending timers
             clearAutoHideTimer();
         } else {
-            // Page is visible again - if timeline was showing, restart the hide timer
             if (TIMELINE_STATE.isVisible && TIMELINE_STATE.isExpanded) {
                 startAutoHideTimer();
             }
         }
     });
 
-    // Also handle window focus/blur
     window.addEventListener('blur', () => {
         clearAutoHideTimer();
     });
@@ -214,13 +319,11 @@ function startAutoHideTimer() {
 function updateTimeline(chapterId, dateRange) {
     console.log(`[TIMELINE] Updating for chapter: ${chapterId}`);
 
-    // Don't show for intro
     if (chapterId === 'intro') {
         hideTimeline();
         return;
     }
 
-    // Get base chapter for sub-chapters (e.g., january-h1 -> january)
     let baseChapterId = chapterId;
     if (chapterId.includes('-h')) {
         baseChapterId = chapterId.split('-h')[0];
@@ -233,21 +336,25 @@ function updateTimeline(chapterId, dateRange) {
         return;
     }
 
-    // Show timeline and expand it (reveals month track)
     showTimeline();
     expandTimeline();
 
-    // Store previous for comparison
     TIMELINE_STATE.previousMonth = TIMELINE_STATE.currentMonth;
     TIMELINE_STATE.currentMonth = monthIndex;
 
-    // Update visual state
+    // Dynamic prologue for Chapter 1
+    const isChapter1 = chapterId === 'january' || chapterId === 'january-h1' || chapterId === 'january-h2';
+    if (isChapter1) {
+        activatePrologue();
+    } else {
+        deactivatePrologue();
+    }
+
     setActiveMonth(monthIndex);
     setCurrentMonth(monthIndex);
     updateProgressIndicator(monthIndex);
     updateDateRange(dateRange);
 
-    // Start auto-hide timer (collapses after 3 seconds)
     startAutoHideTimer();
 }
 
@@ -283,16 +390,17 @@ function setCurrentMonth(monthIndex) {
 
 
 /**
- * Update progress bar - fills up TO the current month (not covering it)
+ * Update progress bar width to match current month position
  */
 function updateProgressIndicator(monthIndex) {
     if (!TIMELINE_STATE.indicatorElement) return;
 
-    const targetMonth = TIMELINE_CONFIG.months[monthIndex];
-    if (!targetMonth) return;
+    // Read the current computed left position of the target notch
+    const notch = TIMELINE_STATE.notchElements[monthIndex];
+    if (!notch) return;
 
-    // Progress goes TO the current month position (not past it)
-    const progress = targetMonth.position;
+    // Use the inline style left value (which is always set as %)
+    const progress = parseFloat(notch.style.left) || 0;
 
     TIMELINE_STATE.indicatorElement.style.transition = `width ${TIMELINE_CONFIG.animation.duration}ms ${TIMELINE_CONFIG.animation.easing}`;
     TIMELINE_STATE.indicatorElement.style.width = `${progress}%`;
@@ -316,8 +424,6 @@ function updateDateRange(dateRange) {
 
 /* ============================================
    EXPAND/COLLAPSE CONTROLS
-   Expand = Full timeline with months visible
-   Collapse = Only tracking period visible
    ============================================ */
 
 function expandTimeline() {
@@ -328,9 +434,8 @@ function expandTimeline() {
     container.classList.remove('collapsed');
     TIMELINE_STATE.isExpanded = true;
 
-    // Play onboarding ripple on first expand
     if (!TIMELINE_STATE.hasOnboarded) {
-        setTimeout(playOnboardingRipple, 400); // slight delay so expand animation finishes
+        setTimeout(playOnboardingRipple, 400);
     }
 
     console.log('[TIMELINE] Expanded - showing full timeline');
@@ -376,7 +481,6 @@ function hideTimeline() {
 
 
 function showFullYearTimeline() {
-    // For intro - show all months dimmed
     TIMELINE_STATE.notchElements.forEach(notch => {
         notch.classList.remove('active', 'current');
     });
@@ -384,6 +488,8 @@ function showFullYearTimeline() {
     if (TIMELINE_STATE.indicatorElement) {
         TIMELINE_STATE.indicatorElement.style.width = '0%';
     }
+
+    deactivatePrologue();
 
     updateDateRange({ start: 'JAN 2025', end: 'DEC 2025' });
 
@@ -405,7 +511,7 @@ function animateTimelineIn() {
             { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }
         );
 
-        gsap.fromTo('.timeline-notch',
+        gsap.fromTo('.timeline-notch:not(.timeline-prologue-notch)',
             { opacity: 0, scale: 0.8 },
             {
                 opacity: 1,
@@ -425,18 +531,15 @@ function animateTimelineIn() {
    ============================================ */
 
 function setupTimelineInteraction() {
-    // Click on timeline container to expand it
     const container = TIMELINE_STATE.containerElement || document.getElementById('timeline-container');
     if (container) {
         container.addEventListener('click', (e) => {
-            // If collapsed, expand it on click
             if (!TIMELINE_STATE.isExpanded && TIMELINE_STATE.isVisible) {
                 expandTimeline();
                 startAutoHideTimer();
             }
         });
 
-        // Hover keeps it expanded
         container.addEventListener('mouseenter', () => {
             if (TIMELINE_STATE.isVisible) {
                 clearAutoHideTimer();
@@ -478,7 +581,6 @@ function handleMonthClick(monthIndex) {
 
 function getChapterForMonth(monthIndex) {
     for (const [chapterId, month] of Object.entries(TIMELINE_CONFIG.chapterMonths)) {
-        // Skip sub-chapters, return main chapter
         if (month === monthIndex && !chapterId.includes('-h')) {
             return chapterId;
         }
@@ -489,7 +591,6 @@ function getChapterForMonth(monthIndex) {
 
 /* ============================================
    ONBOARDING: First-expand ripple + click hint
-   Makes it obvious that months are clickable
    ============================================ */
 
 function playOnboardingRipple() {
@@ -498,16 +599,13 @@ function playOnboardingRipple() {
 
     console.log('[TIMELINE] Playing onboarding ripple');
 
-    // Stagger a ping animation across all 12 month dots
     TIMELINE_STATE.notchElements.forEach((notch, i) => {
         setTimeout(() => {
             notch.classList.add('onboard-ping');
-            // Remove class after animation completes so hover still works
             setTimeout(() => notch.classList.remove('onboard-ping'), 650);
-        }, i * 80); // 80ms stagger = ~1s total wave
+        }, i * 80);
     });
 
-    // Show the "click to jump" hint below the track
     showClickHint();
 }
 
@@ -525,12 +623,10 @@ function showClickHint() {
     wrapper.appendChild(hint);
     TIMELINE_STATE.hintElement = hint;
 
-    // Trigger the entrance animation
     requestAnimationFrame(() => {
         hint.classList.add('visible');
     });
 
-    // Graceful exit after 4.5s
     setTimeout(() => {
         if (hint.parentNode) {
             hint.classList.remove('visible');
@@ -545,7 +641,6 @@ function showClickHint() {
 
 
 function dismissOnboarding() {
-    // Gracefully exit hint if user clicks a month
     if (TIMELINE_STATE.hintElement && TIMELINE_STATE.hintElement.parentNode) {
         TIMELINE_STATE.hintElement.classList.remove('visible');
         TIMELINE_STATE.hintElement.classList.add('exiting');
@@ -568,7 +663,6 @@ function updateTimelineForMobile() {
     TIMELINE_STATE.notchElements.forEach((notch, index) => {
         const label = notch.querySelector('.timeline-notch-label');
         if (label) {
-            // On mobile, show every 3rd label
             if (isMobile && index % 3 !== 0) {
                 label.style.display = 'none';
             } else {
@@ -595,7 +689,6 @@ window.collapseTimeline = collapseTimeline;
 window.TIMELINE_CONFIG = TIMELINE_CONFIG;
 window.TIMELINE_STATE = TIMELINE_STATE;
 
-// TimelineUtils for chapter animations
 window.TimelineUtils = {
     showTimeline,
     hideTimeline,
