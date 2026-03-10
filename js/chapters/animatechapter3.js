@@ -30,9 +30,9 @@ function animateChapter3(map, chapterConfig) {
         SVG_SPOOF: 'assets/svg/spoofing.svg',
 
         // --- MARKER SIZES ---
-        LIGHT_MARKER_SIZE: 32,           // Light detection marker size
-        DARK_MARKER_SIZE: 40,            // Dark detection marker size
-        SPOOF_MARKER_SIZE: 38,           // Spoofing marker size
+        LIGHT_MARKER_SIZE: 36,
+        DARK_MARKER_SIZE: 36,
+        SPOOF_MARKER_SIZE: 36,
 
         // --- VESSEL MARKER ---
         VESSEL_SIZE: 14,

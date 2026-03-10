@@ -31,8 +31,8 @@ function animateChapter6(map, chapterConfig) {
         SVG_DARK: 'assets/svg/darkdetection.svg',
 
         // --- MARKER SIZES ---
-        LIGHT_MARKER_SIZE: 32,
-        DARK_MARKER_SIZE: 40,
+        LIGHT_MARKER_SIZE: 36,
+        DARK_MARKER_SIZE: 36,
 
         // --- VESSEL MARKER ---
         VESSEL_SIZE: 14,

@@ -23,8 +23,8 @@ function animateChapter1(map, chapterConfig) {
         // --- SVG MARKER FILES (from main directory) ---
         SVG_LIGHT: 'assets/svg/lightstsdectection.svg',
         SVG_DARK: 'assets/svg/darkdetection.svg',
-        MARKER_SIZE: 32,                 // SVG marker width in pixels (reduced from 40)
-        DARK_MARKER_SIZE: 40,            // Dark detection marker size
+        MARKER_SIZE: 36,
+        DARK_MARKER_SIZE: 36,
 
         // --- STS MARKER (Main Chapter - Blue) ---
         STS_COORDS: [102.0161, 2.3028],  // STS location

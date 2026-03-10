@@ -260,7 +260,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'JACK-UP BARGES (×3)',
-                   imo: 'UNATTRIBUTED',
+                   imo: 'N/A',
                    cargo: 'CONSTRUCTION',
                    operation: 'DARK DEPARTURE'
                }
@@ -301,7 +301,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'JACK-UP BARGES (×3)',
-                   imo: 'UNATTRIBUTED',
+                   imo: 'N/A',
                    cargo: 'AMPHIBIOUS OPS',
                    operation: 'DOCK FORMATION'
                }
@@ -341,7 +341,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'JACK-UP BARGES',
-                   imo: 'UNATTRIBUTED',
+                   imo: 'N/A',
                    cargo: 'CONSTRUCTION',
                    operation: 'ARTIFICIAL DOCK'
                }
@@ -647,6 +647,14 @@
            vessels: [
                { name: 'ZHU HAI YUN', color: '#00ff88', status: 'Autonomous' }
            ],
+           vesselInfo: {
+               vessel1: {
+                   name: 'ZHU HAI YUN',
+                   imo: '9947055',
+                   cargo: 'AUTONOMOUS',
+                   operation: 'SURVEY TRANSIT'
+               }
+           },
            dataFile: 'data/ZHUHAIYUN AIS Data_track_time_windows_min (1).geojson',
            animateFile: 'animatechapter8'
        },
@@ -676,7 +684,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'KORYAK FSU',
-                   imo: '9253724',
+                   imo: '9915105',
                    cargo: 'LNG STORAGE',
                    operation: 'STS TRANSFER'
                },
@@ -792,7 +800,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'DUNE',
-                   imo: '9236804',
+                   imo: '9569712',
                    cargo: 'CRUDE OIL',
                    operation: 'DARK LOADING'
                }
@@ -833,7 +841,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'DUNE',
-                   imo: '9236804',
+                   imo: '9569712',
                    cargo: 'CRUDE OIL',
                    operation: 'STS DISCHARGE'
                },

@@ -20,7 +20,7 @@ function animateChapter9(map, chapterConfig) {
         MARKER_DELAY: 300,               // Delay between marker appearances
 
         // --- SVG MARKER SIZE ---
-        MARKER_SIZE: 40,
+        MARKER_SIZE: 36,
 
         // --- MARKER LOCATIONS [lng, lat] ---
 

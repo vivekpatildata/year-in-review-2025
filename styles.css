@@ -1306,8 +1306,8 @@ body {
     background-size: 0% 100%;
     background-position: 0 0;
     border-radius: 3px;
-    padding: 1px 4px;
-    margin: 0 -2px;
+    padding: 1px 2px;
+    margin: 0 -1px;
     transition: background-size 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
@@ -1886,10 +1886,10 @@ body {
 .theia-insight::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
     background: conic-gradient(
         from 0deg,
         transparent 0deg,

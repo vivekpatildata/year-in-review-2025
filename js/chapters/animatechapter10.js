@@ -35,7 +35,7 @@ function animateChapter10(map, chapterConfig) {
         MARKER_SHOW_DELAY: 2000,
 
         // --- MARKER SIZES ---
-        MARKER_SIZE: 40,
+        MARKER_SIZE: 36,
         VESSEL_SIZE: 14,
 
         // --- CAMERA POSITIONS ---

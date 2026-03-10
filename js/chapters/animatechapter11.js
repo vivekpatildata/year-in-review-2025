@@ -25,7 +25,7 @@ function animateChapter11(map, chapterConfig) {
         MARKER_DELAY: 300,                  // Delay between marker appearances
 
         // --- SVG MARKER SIZE ---
-        MARKER_SIZE: 40,
+        MARKER_SIZE: 36,
 
         // --- NUMBER MARKER COLORS ---
         NUMBER_BORDER_COLOR: '#00ff88',      // Green border for numbered markers
@@ -55,7 +55,7 @@ function animateChapter11(map, chapterConfig) {
         DET_3_SUBLABEL: 'STS between DUNE and STELLAR ORACLE',
 
         // Detection 4: Light Detection near Ho Chi Minh - WITH sat image
-        DET_4: [109.4054, 8.4894],
+        DET_4: [109.4347, 8.4687],
         DET_4_IMAGE: 'images/chapter11/chapter11D.png',
         DET_4_OFFSET: [200, 100],
         DET_4_LABEL: 'Oct 2025',
@@ -67,7 +67,7 @@ function animateChapter11(map, chapterConfig) {
         TRANS_CHANGE: [122.116583, 22.449917],
 
         // Detection 5: Light Detection near Jiangsu, China - has sat image
-        DET_5: [124.1191, 34.0337],
+        DET_5: [124.0388, 34.2071],
         DET_5_IMAGE: 'images/chapter11/chapter11E.png',
         DET_5_OFFSET: [200, 100],
         DET_5_LABEL: 'Nov 2025',

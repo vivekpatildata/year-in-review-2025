@@ -25,7 +25,7 @@ function animateChapter8(map, chapterConfig) {
         SVG_LIGHT: 'assets/svg/lightdetection.svg',
 
         // --- MARKER SIZES ---
-        LIGHT_MARKER_SIZE: 32,
+        LIGHT_MARKER_SIZE: 36,
 
         // --- VESSEL MARKER ---
         VESSEL_SIZE: 14,

@@ -32,7 +32,7 @@ function animateChapter7(mapInput, chapterConfig) {
         PHASE_DELAY: 800,                    // Delay between phases
 
         // --- SVG MARKER SIZE ---
-        MARKER_SIZE: 40,
+        MARKER_SIZE: 36,
 
         // --- MARKER LOCATIONS [lng, lat] (independent from satellite images) ---
         // Dark Detection 1: Feodosia Bay - 17-19 Aug 2025 - Loading cargo

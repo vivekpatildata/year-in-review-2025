@@ -29,7 +29,7 @@ function animateChapter12(map, chapterConfig) {
         PHASE_DELAY: 600,                 // Delay between phases
 
         // --- SVG MARKER SIZE ---
-        MARKER_SIZE: 40,
+        MARKER_SIZE: 36,
 
         // --- CAMERA ---
         CAMERA: { center: [-65, 12], zoom: 4 },

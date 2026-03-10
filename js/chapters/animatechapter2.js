@@ -598,21 +598,6 @@ function animateChapter2(map, chapterConfig) {
             aoi1Markers.push(marker);
         });
 
-        // Create image popup with RED GLOW
-        const imgsHtml = AOI1.IMAGES.map(src =>
-            `<img src="${src}" onerror="this.style.background='linear-gradient(135deg, #0a1628 0%, #1a2844 100%)'">`
-        ).join('');
-
-        mainPopup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: false,
-            className: 'ch2-pop',
-            offset: [AOI1.IMG_OFFSET_X, AOI1.IMG_OFFSET_Y]
-        })
-            .setLngLat(AOI1.CENTER)
-            .setHTML(`<div class="ch2-main-gal">${imgsHtml}</div>`)
-            .addTo(map);
-
         console.log('  AOI1 displayed with 3 barge markers');
     }
 
