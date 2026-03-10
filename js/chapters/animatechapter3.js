@@ -852,22 +852,12 @@ function animateChapter3(map, chapterConfig) {
         vesselMkr = new mapboxgl.Marker({ element: vel, anchor: 'center' })
             .setLngLat(coords[mainEndIndex]).addTo(map);
 
-        // === REAL CARGO ORIGIN MARKER (Iran/Bandar Abbas) ===
-        // Shows where the vessel actually loaded cargo while spoofing
-        // Position slightly below center of dark detection coordinates
-        const originLng = (IRAN.DETECTIONS[0].lng + IRAN.DETECTIONS[1].lng) / 2;  // 56.203
-        const originLat = ((IRAN.DETECTIONS[0].lat + IRAN.DETECTIONS[1].lat) / 2) - 0.72;  // ~26.34 (tiny bit more south)
+        // === DARK DETECTION MARKER (Iran/Bandar Abbas) ===
+        const originLng = (IRAN.DETECTIONS[0].lng + IRAN.DETECTIONS[1].lng) / 2;
+        const originLat = ((IRAN.DETECTIONS[0].lat + IRAN.DETECTIONS[1].lat) / 2) - 0.72;
 
-        const originEl = document.createElement('div');
-        originEl.className = 'ch3-origin-marker';
-        originEl.innerHTML = `
-            <div class="ch3-origin-label">REAL CARGO ORIGIN</div>
-            <div class="ch3-origin-glow">
-                <div class="ch3-origin-ring-outer"></div>
-                <div class="ch3-origin-core"></div>
-            </div>
-        `;
-        originMarker = new mapboxgl.Marker({ element: originEl, anchor: 'bottom' })
+        const originEl = createDarkMarker(CONFIG.SVG_DARK);
+        originMarker = new mapboxgl.Marker({ element: originEl, anchor: 'center', rotation: 60 })
             .setLngLat([originLng, originLat])
             .addTo(map);
 

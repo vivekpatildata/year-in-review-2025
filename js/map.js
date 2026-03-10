@@ -154,7 +154,7 @@
                },
                vessel2: {
                    name: 'VERONICA III',
-                   imo: '9256498',
+                   imo: '9326055',
                    cargo: 'CRUDE OIL',
                    operation: 'STS TRANSFER'
                }
@@ -375,7 +375,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'OCEANA ROSE',
-                   imo: '9293966',
+                   imo: '9497464',
                    cargo: 'LOOSE CARGO',
                    operation: '37D AIS SPOOF'
                }
@@ -409,12 +409,13 @@
            layers: [],
            legend: [
                { type: 'line', color: '#00ff88', label: 'Vessel Track' },
-               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' }
+               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
+               { type: 'svg', icon: 'assets/svg/darkdetection.svg', label: 'Dark Detection' }
            ],
            vesselInfo: {
                vessel1: {
                    name: 'OCEANA ROSE',
-                   imo: '9293966',
+                   imo: '9497464',
                    cargo: 'LOOSE CARGO',
                    operation: 'BARGE TRANSFER'
                }
@@ -449,7 +450,7 @@
            vesselInfo: {
                vessel1: {
                    name: 'KIBA',
-                   imo: '9315407',
+                   imo: '9200445',
                    cargo: 'BULK CARGO',
                    operation: '21D AIS SPOOF'
                }
@@ -483,12 +484,13 @@
            layers: [],
            legend: [
                { type: 'line', color: '#00ff88', label: 'Vessel Track' },
-               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' }
+               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
+               { type: 'svg', icon: 'assets/svg/darkdetection.svg', label: 'Dark Detection' }
            ],
            vesselInfo: {
                vessel1: {
                    name: 'KIBA',
-                   imo: '9315407',
+                   imo: '9200445',
                    cargo: 'IRAN BULK',
                    operation: '38D TRANSIT'
                }

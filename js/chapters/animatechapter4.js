@@ -951,19 +951,10 @@ function animateChapter4(map, chapterConfig) {
         vesselMkr = new mapboxgl.Marker({ element: vel, anchor: 'center' })
             .setLngLat(coords[mainEndIndex]).addTo(map);
 
-        // === REAL CARGO ORIGIN MARKER (Iran - Asalouyeh Port) ===
-        // Shows where the vessel actually loaded cargo while spoofing
-        const originEl = document.createElement('div');
-        originEl.className = 'ch4-origin-marker';
-        originEl.innerHTML = `
-            <div class="ch4-origin-label">REAL CARGO ORIGIN</div>
-            <div class="ch4-origin-glow">
-                <div class="ch4-origin-ring-outer"></div>
-                <div class="ch4-origin-core"></div>
-            </div>
-        `;
-        originMarker = new mapboxgl.Marker({ element: originEl, anchor: 'bottom' })
-            .setLngLat([51.90, 27.25])  // Further west into the Persian Gulf waters off Asalouyeh
+        // === DARK DETECTION MARKER (Iran - Asalouyeh Port) ===
+        const originEl = createDarkMarker(CONFIG.SVG_DARK);
+        originMarker = new mapboxgl.Marker({ element: originEl, anchor: 'center', rotation: -30 })
+            .setLngLat([51.90, 27.25])
             .addTo(map);
 
         // Start animation from mainEndIndex
