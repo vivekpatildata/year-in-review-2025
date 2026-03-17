@@ -739,41 +739,41 @@
            animateFile: null
        },
        
-       // === OCTOBER: LNG PHECDA ===
+       // === OCTOBER: FALCON Part 2 ===
        october: {
            id: 'october',
            month: '10',
-           title: 'LNG PHECDA',
-           subtitle: 'Critical Infrastructure Loitering',
-           region: 'Irish Sea / Bay of Biscay',
-           dateRange: { start: 'OCT 16, 2025', end: 'NOV 23, 2025' },
+           title: 'FALCON Part 2',
+           subtitle: 'Strait of Hormuz to Gulf of Aden',
+           region: 'Persian Gulf / Gulf of Aden',
+           dateRange: { start: 'SEP 25, 2025', end: 'OCT 20, 2025' },
            camera: {
-               center: [-0.542, 53.936],  // Irish Sea / Bay of Biscay
-               zoom: 5.57,
+               center: [52.5, 22.0],
+               zoom: 4.2,
                pitch: 0,
                bearing: 0,
-               duration: 2500
+               duration: 2000
            },
            scrollType: 'vertical',
-           layers: ['ch10-track-line', 'ch10-cables-line'],
+           layers: ['ch10-track-line'],
            legend: [
-               { type: 'line', color: '#00ff88', label: 'LNG PHECDA AIS Track' },
-               { type: 'line', color: '#00a3e3', label: 'Telecom Cable' },
-               { type: 'line', color: '#ff9f43', label: 'Electricity Cable' },
-               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' }
+               { type: 'line', color: '#00ff88', label: 'FALCON AIS Track' },
+               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
+               { type: 'svg', icon: 'assets/svg/darkdetection.svg', label: 'Dark Detection' },
+               { type: 'svg', icon: 'assets/svg/spoofing.svg', label: 'Spoofing Detection' }
            ],
            vesselInfo: {
                vessel1: {
-                   name: 'LNG PHECDA',
-                   imo: '9834313',
-                   cargo: 'LNG',
-                   operation: 'LOITERING'
+                   name: 'FALCON',
+                   imo: '9014432',
+                   cargo: 'LPG',
+                   operation: 'AIS DARK'
                }
            },
            vessels: [
-               { name: 'LNG PHECDA', color: '#00ff88', status: 'Loitering' }
+               { name: 'FALCON', color: '#00ff88', status: 'AIS Dark' }
            ],
-           dataFile: 'data/chapter10-lng-phecda-extended.geojson',
+           dataFile: 'data/chapter10-falcon.geojson',
            animateFile: 'animatechapter10'
        },
        
@@ -1423,7 +1423,7 @@
            '.ch9-beihai-img-holder', '.ch9-regular-img-holder',
            
            // Chapter 10
-           '.ch10-svg-marker', '.ch10-img-holder', '.ch10-pop', '.ch10-vessel',
+           '.ch10-svg-marker', '.ch10-img-holder', '.ch10-pop', '.ch10-vessel', '.ch10-number-marker',
            
            // Chapter 11
            '.ch11-svg-marker', '.ch11-number-marker', '.ch11-img-placeholder',
@@ -2309,12 +2309,12 @@
                return;
            }
            
-           // Special handling for october: Irish Sea / Bay of Biscay
+           // Special handling for october: Persian Gulf / Strait of Hormuz
            if (STATE.currentChapter === 'october') {
-               STATE.miniMarker.setLngLat([-4.4, 53.7]);  // Irish Sea (water)
+               STATE.miniMarker.setLngLat([56.3, 25.5]);  // Gulf of Oman (water)
                STATE.miniMap.jumpTo({
-                   center: [-4, 52],
-                   zoom: 3.0
+                   center: [52, 20],
+                   zoom: 2.5
                });
                return;
            }
@@ -3177,7 +3177,7 @@
                vessel1: { name: 'THEIA COVERAGE', imo: 'GLOBAL', cargo: 'MARITIME DATA', operation: 'ANALYSIS' }
            },
            'october': {
-               vessel1: { name: 'THEIA COVERAGE', imo: 'GLOBAL', cargo: 'MARITIME DATA', operation: 'DETECTION' }
+               vessel1: { name: 'FALCON', imo: '9014432', cargo: 'LPG', operation: 'AIS DARK' }
            },
            'november': {
                vessel1: { name: 'THEIA COVERAGE', imo: 'GLOBAL', cargo: 'MARITIME DATA', operation: 'TRACKING' }
