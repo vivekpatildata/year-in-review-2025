@@ -257,6 +257,7 @@ function animateChapter10(map, chapterConfig) {
 
             /* === LIGHT DETECTION IMAGE HOLDER (Blue Glow) === */
             .ch10-light-img-holder {
+                position: relative;
                 display: inline-block;
                 padding: 0 !important;
                 margin: 0 !important;
@@ -265,7 +266,6 @@ function animateChapter10(map, chapterConfig) {
                 background-color: transparent !important;
                 border: none !important;
                 outline: none !important;
-                overflow: hidden;
                 box-shadow:
                     0 0 25px rgba(0, 163, 227, 0.35),
                     0 0 50px rgba(0, 163, 227, 0.15);
@@ -283,6 +283,7 @@ function animateChapter10(map, chapterConfig) {
 
             /* === DARK DETECTION IMAGE HOLDER (Orange + White Tint Glow) === */
             .ch10-dark-img-holder {
+                position: relative;
                 display: inline-block;
                 padding: 0 !important;
                 margin: 0 !important;
@@ -291,7 +292,6 @@ function animateChapter10(map, chapterConfig) {
                 background-color: transparent !important;
                 border: none !important;
                 outline: none !important;
-                overflow: hidden;
                 box-shadow:
                     0 0 15px rgba(255, 255, 255, 0.5),
                     0 0 30px rgba(255, 200, 100, 0.4),
@@ -630,9 +630,9 @@ function animateChapter10(map, chapterConfig) {
         })
             .setLngLat(lngLat)
             .setHTML(`
-                <div style="position:relative; display:inline-block;">
+                <div class="${holderClass}" style="position:relative;">
                     ${badgeHtml}
-                    <div class="${holderClass}"><img class="${imgClass}" src="${imageSrc}"></div>
+                    <img class="${imgClass}" src="${imageSrc}">
                 </div>
             `)
             .addTo(map);

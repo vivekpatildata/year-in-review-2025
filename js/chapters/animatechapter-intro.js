@@ -12,19 +12,16 @@ function animateChapterIntro(map, chapterConfig) {
     // ============================================================================
 
     const CONFIG = {
-        // GeoJSON data path
-        GEOJSON_PATH: 'data/cleaned-2023-ustoasia-jan-august.geojson',
+        GEOJSON_PATH: 'data/global-shipping-routes.geojson',
+        LANE_FADE_DURATION: 5000,
 
-        // Animation timing
-        LANE_FADE_DURATION: 4000,
-
-        // Visual settings - RED fuzzy glow palette
         LANE_COLORS: {
-            bright: 'rgba(255, 70, 90, 0.6)',
-            primary: 'rgba(255, 90, 110, 0.4)',
-            secondary: 'rgba(255, 110, 130, 0.3)',
-            glow: 'rgba(255, 50, 70, 0.2)',
-            outerGlow: 'rgba(255, 40, 60, 0.1)'
+            core:       'rgba(255, 85, 100, 0.55)',
+            bright:     'rgba(255, 65, 85, 0.35)',
+            mid:        'rgba(255, 90, 110, 0.22)',
+            soft:       'rgba(255, 50, 70, 0.14)',
+            haze:       'rgba(255, 40, 60, 0.08)',
+            atmosphere: 'rgba(255, 30, 50, 0.04)'
         }
     };
 
@@ -37,10 +34,14 @@ function animateChapterIntro(map, chapterConfig) {
     const timeouts = [];
 
     const SOURCE_LANES = 'intro-shipping-lanes';
-    const LAYER_LANES_OUTER_GLOW = 'intro-lanes-outer-glow';
-    const LAYER_LANES_GLOW = 'intro-lanes-glow';
-    const LAYER_LANES_MAIN = 'intro-lanes-main';
-    const LAYER_LANES_BRIGHT = 'intro-lanes-bright';
+    const LAYERS = [
+        'intro-lanes-atmosphere',
+        'intro-lanes-haze',
+        'intro-lanes-soft',
+        'intro-lanes-mid',
+        'intro-lanes-bright',
+        'intro-lanes-core'
+    ];
 
     // ============================================================================
     // ANTIMERIDIAN CROSSING FIX
@@ -118,7 +119,6 @@ function animateChapterIntro(map, chapterConfig) {
 
             console.log(`[Intro] Loaded ${rawData.features?.length || 0} routes, split into ${geojsonData.features.length} segments`);
 
-            // Add source
             if (!map.getSource(SOURCE_LANES)) {
                 map.addSource(SOURCE_LANES, {
                     type: 'geojson',
@@ -126,65 +126,31 @@ function animateChapterIntro(map, chapterConfig) {
                 });
             }
 
-            // Layer 1: Outer fuzzy glow (very wide, very blurred)
-            if (!map.getLayer(LAYER_LANES_OUTER_GLOW)) {
-                map.addLayer({
-                    id: LAYER_LANES_OUTER_GLOW,
-                    type: 'line',
-                    source: SOURCE_LANES,
-                    paint: {
-                        'line-color': CONFIG.LANE_COLORS.outerGlow,
-                        'line-width': 20,
-                        'line-blur': 18,
-                        'line-opacity': 0
-                    }
-                });
-            }
+            const layerDefs = [
+                { id: LAYERS[0], color: CONFIG.LANE_COLORS.atmosphere, width: 32, blur: 28 },
+                { id: LAYERS[1], color: CONFIG.LANE_COLORS.haze,       width: 22, blur: 20 },
+                { id: LAYERS[2], color: CONFIG.LANE_COLORS.soft,       width: 14, blur: 14 },
+                { id: LAYERS[3], color: CONFIG.LANE_COLORS.mid,        width: 7,  blur: 7  },
+                { id: LAYERS[4], color: CONFIG.LANE_COLORS.bright,     width: 3,  blur: 3  },
+                { id: LAYERS[5], color: CONFIG.LANE_COLORS.core,       width: 1,  blur: 0.5 }
+            ];
 
-            // Layer 2: Wide glow
-            if (!map.getLayer(LAYER_LANES_GLOW)) {
-                map.addLayer({
-                    id: LAYER_LANES_GLOW,
-                    type: 'line',
-                    source: SOURCE_LANES,
-                    paint: {
-                        'line-color': CONFIG.LANE_COLORS.glow,
-                        'line-width': 12,
-                        'line-blur': 12,
-                        'line-opacity': 0
-                    }
-                });
-            }
-
-            // Layer 3: Main lane body
-            if (!map.getLayer(LAYER_LANES_MAIN)) {
-                map.addLayer({
-                    id: LAYER_LANES_MAIN,
-                    type: 'line',
-                    source: SOURCE_LANES,
-                    paint: {
-                        'line-color': CONFIG.LANE_COLORS.secondary,
-                        'line-width': 4,
-                        'line-blur': 4,
-                        'line-opacity': 0
-                    }
-                });
-            }
-
-            // Layer 4: Bright center line
-            if (!map.getLayer(LAYER_LANES_BRIGHT)) {
-                map.addLayer({
-                    id: LAYER_LANES_BRIGHT,
-                    type: 'line',
-                    source: SOURCE_LANES,
-                    paint: {
-                        'line-color': CONFIG.LANE_COLORS.bright,
-                        'line-width': 1.5,
-                        'line-blur': 1,
-                        'line-opacity': 0
-                    }
-                });
-            }
+            layerDefs.forEach(def => {
+                if (!map.getLayer(def.id)) {
+                    map.addLayer({
+                        id: def.id,
+                        type: 'line',
+                        source: SOURCE_LANES,
+                        layout: { 'line-join': 'round', 'line-cap': 'round' },
+                        paint: {
+                            'line-color': def.color,
+                            'line-width': def.width,
+                            'line-blur': def.blur,
+                            'line-opacity': 0
+                        }
+                    });
+                }
+            });
 
             // Animate lanes fading in
             animateLanesFadeIn();
@@ -198,28 +164,22 @@ function animateChapterIntro(map, chapterConfig) {
         const startTime = performance.now();
         const duration = CONFIG.LANE_FADE_DURATION;
 
+        // Target opacities per layer (outer → inner)
+        const targets = [0.5, 0.6, 0.65, 0.6, 0.7, 0.8];
+
         function animate() {
             if (!running) return;
 
             const elapsed = performance.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
-
-            // Smooth ease-out curve
             const eased = 1 - Math.pow(1 - progress, 4);
 
             try {
-                if (map.getLayer(LAYER_LANES_OUTER_GLOW)) {
-                    map.setPaintProperty(LAYER_LANES_OUTER_GLOW, 'line-opacity', eased * 0.6);
-                }
-                if (map.getLayer(LAYER_LANES_GLOW)) {
-                    map.setPaintProperty(LAYER_LANES_GLOW, 'line-opacity', eased * 0.7);
-                }
-                if (map.getLayer(LAYER_LANES_MAIN)) {
-                    map.setPaintProperty(LAYER_LANES_MAIN, 'line-opacity', eased * 0.6);
-                }
-                if (map.getLayer(LAYER_LANES_BRIGHT)) {
-                    map.setPaintProperty(LAYER_LANES_BRIGHT, 'line-opacity', eased * 0.8);
-                }
+                LAYERS.forEach((id, i) => {
+                    if (map.getLayer(id)) {
+                        map.setPaintProperty(id, 'line-opacity', eased * targets[i]);
+                    }
+                });
             } catch (e) { /* ignore */ }
 
             if (progress < 1 && running) {
@@ -251,12 +211,10 @@ function animateChapterIntro(map, chapterConfig) {
         // Reset text highlights
         clearHighlights();
 
-        // Remove map layers/sources
         try {
-            if (map.getLayer(LAYER_LANES_BRIGHT)) map.removeLayer(LAYER_LANES_BRIGHT);
-            if (map.getLayer(LAYER_LANES_MAIN)) map.removeLayer(LAYER_LANES_MAIN);
-            if (map.getLayer(LAYER_LANES_GLOW)) map.removeLayer(LAYER_LANES_GLOW);
-            if (map.getLayer(LAYER_LANES_OUTER_GLOW)) map.removeLayer(LAYER_LANES_OUTER_GLOW);
+            [...LAYERS].reverse().forEach(id => {
+                if (map.getLayer(id)) map.removeLayer(id);
+            });
             if (map.getSource(SOURCE_LANES)) map.removeSource(SOURCE_LANES);
         } catch (e) { /* ignore */ }
     }
