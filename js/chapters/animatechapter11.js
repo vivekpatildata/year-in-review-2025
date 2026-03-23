@@ -1340,7 +1340,7 @@ function animateChapter11(map, chapterConfig) {
                     <span class="legend-main">DUNE Assessed AIS Track</span>
                 </div>
                 <div class="ch11-legend-item">
-                    <div class="ch11-legend-icon"><img src="darkdetection.svg" alt=""></div>
+                    <div class="ch11-legend-icon"><img src="assets/svg/darkdetection.svg" alt=""></div>
                     <span class="legend-main">Dark Detection</span>
                 </div>
             `;
@@ -1362,11 +1362,11 @@ function animateChapter11(map, chapterConfig) {
                     </div>
                 </div>
                 <div class="ch11-legend-item">
-                    <div class="ch11-legend-icon"><img src="lightdetection.svg" alt=""></div>
+                    <div class="ch11-legend-icon"><img src="assets/svg/lightdetection.svg" alt=""></div>
                     <span class="legend-main">Light Detection</span>
                 </div>
                 <div class="ch11-legend-item">
-                    <div class="ch11-legend-icon"><img src="bunkering.svg" alt=""></div>
+                    <div class="ch11-legend-icon"><img src="assets/svg/bunkering.svg" alt=""></div>
                     <span class="legend-main">STS Detection</span>
                 </div>
             `;
@@ -1395,11 +1395,11 @@ function animateChapter11(map, chapterConfig) {
                     </div>
                 </div>
                 <div class="ch11-legend-item">
-                    <div class="ch11-legend-icon"><img src="lightdetection.svg" alt=""></div>
+                    <div class="ch11-legend-icon"><img src="assets/svg/lightdetection.svg" alt=""></div>
                     <span class="legend-main">Light Detection</span>
                 </div>
                 <div class="ch11-legend-item">
-                    <div class="ch11-legend-icon"><img src="transmissionchange.svg" alt=""></div>
+                    <div class="ch11-legend-icon"><img src="assets/svg/transmissionchange.svg" alt=""></div>
                     <span class="legend-main">Transmission Change</span>
                 </div>
             `;

@@ -145,11 +145,11 @@ function animateChapter7(mapInput, chapterConfig) {
     let progress = 0;
     let startT = null;
     let running = false;
-    let phase = 'assessed';  // 'assessed' -> 'ais' -> 'complete'
+    let phase = 'assessed';
+    let pendingTimeouts = [];
 
-    // Markers and popups
-    let vesselMkrLeft = null;   // Vessel on left map (Crimea)
-    let vesselMkrRight = null;  // Vessel on right map (Egypt route)
+    let vesselMkrLeft = null;
+    let vesselMkrRight = null;
     let feodosiaMarkers = [];   // Array of dark markers at Feodosia (11 total)
     let sevastopolMarkers = []; // Array of dark markers at Sevastopol (6 total)
     let humintMkr = null;       // Bosphorus (right map)
@@ -532,6 +532,8 @@ function animateChapter7(mapInput, chapterConfig) {
 
     function clearAll() {
         stopAnim();
+        pendingTimeouts.forEach(id => clearTimeout(id));
+        pendingTimeouts = [];
         clearMarkers();
         clearLayers();
         progress = 0;
@@ -638,21 +640,21 @@ function animateChapter7(mapInput, chapterConfig) {
                 <span>Dark Transit (Assessed)</span>
             </div>
             <div class="ch7-legend-item">
-                <img class="ch7-legend-icon" src="darkdetection.svg" alt="">
+                <img class="ch7-legend-icon" src="assets/svg/darkdetection.svg" alt="">
                 <span>Dark Detection</span>
             </div>
             <div class="ch7-legend-item">
-                <img class="ch7-legend-icon" src="humintdetection.svg" alt="">
+                <img class="ch7-legend-icon" src="assets/svg/humintdetection.svg" alt="">
                 <span>HUMINT Detection</span>
             </div>
             <div class="ch7-legend-item">
-                <img class="ch7-legend-icon" src="lightdetection.svg" alt="">
+                <img class="ch7-legend-icon" src="assets/svg/lightdetection.svg" alt="">
                 <span>Light Detection</span>
             </div>
         `;
 
         document.body.appendChild(legend);
-        setTimeout(() => legend.classList.add('visible'), 100);
+        pendingTimeouts.push(setTimeout(() => legend.classList.add('visible'), 100));
     }
 
     // ============================================================================
@@ -907,11 +909,11 @@ function animateChapter7(mapInput, chapterConfig) {
             mapLeft
         );
         
-        // Show all Feodosia markers
-        setTimeout(() => {
+        pendingTimeouts.push(setTimeout(() => {
+            if (!running) return;
             feodosiaMarkers.forEach(m => showMarker(m));
             feodosiaMarkersShown = true;
-        }, 200);
+        }, 200));
 
         // Create legend
         createLegend();
@@ -1000,10 +1002,10 @@ function animateChapter7(mapInput, chapterConfig) {
                 mapLeft
             );
             
-            // Show all Sevastopol markers
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
+                if (!running) return;
                 sevastopolMarkers.forEach(m => showMarker(m));
-            }, 50);
+            }, 50));
         }
 
         if (pct >= 1) {
@@ -1031,17 +1033,16 @@ function animateChapter7(mapInput, chapterConfig) {
 
             console.log('  Assessed track complete, starting AIS track...');
 
-            // Transition to AIS phase after a short delay
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
+                if (!running) return;
                 phase = 'ais';
                 progress = 0;
                 startT = performance.now();
                 
-                // Show vessel on RIGHT map when AIS phase starts
                 if (vesselMkrRight) {
                     vesselMkrRight.getElement().classList.remove('hidden');
                 }
-            }, CONFIG.PHASE_DELAY);
+            }, CONFIG.PHASE_DELAY));
         }
     }
 
@@ -1080,13 +1081,11 @@ function animateChapter7(mapInput, chapterConfig) {
                     CONFIG.HUMINT_IMG_OFFSET,
                     mapRight
                 );
-                setTimeout(() => {
+                pendingTimeouts.push(setTimeout(() => {
                     showMarker(humintMkr);
-                }, 50);
+                }, 50));
             }
 
-            // Show light detection at El Dekheila (~90% through AIS track) on RIGHT map
-            // SVG points right (3 o'clock), 12 o'clock = -90°
             if (!lightMkrShown && pct >= 0.90) {
                 lightMkrShown = true;
                 const lightEl = createLightMarker('assets/svg/lightdetection.svg');
@@ -1100,9 +1099,9 @@ function animateChapter7(mapInput, chapterConfig) {
                     CONFIG.LIGHT_IMG_OFFSET,
                     mapRight
                 );
-                setTimeout(() => {
+                pendingTimeouts.push(setTimeout(() => {
                     showMarker(lightMkr);
-                }, 50);
+                }, 50));
             }
         }
 

@@ -129,28 +129,134 @@ function initializeScrollAnimations() {
     });
 }
 
+// ============================================================================
+// CLOSING BREATHING GRADIENT (matches intro aesthetic)
+// ============================================================================
+
+const closingGlow = {
+    BREATH_PERIOD: 16000,
+    MAX_RADIUS_RATIO: 0.55,
+    MIN_RADIUS_RATIO: 0.28,
+    GLOWS: [
+        { cx: 0.35, cy: 0.40, color: [0, 180, 200], maxAlpha: 0.14, phaseOffset: 0 },
+        { cx: 0.68, cy: 0.62, color: [0, 120, 180], maxAlpha: 0.11, phaseOffset: Math.PI * 0.7 }
+    ]
+};
+
+let closingRafId = null;
+let closingCanvas = null;
+let closingCtx = null;
+let closingRunning = false;
+
+function initClosingCanvas() {
+    closingCanvas = document.getElementById('closing-canvas');
+    if (!closingCanvas) return false;
+    closingCtx = closingCanvas.getContext('2d');
+    resizeClosingCanvas();
+    window.addEventListener('resize', resizeClosingCanvas);
+    return true;
+}
+
+function resizeClosingCanvas() {
+    if (!closingCanvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const rect = closingCanvas.parentElement.getBoundingClientRect();
+    closingCanvas.width = rect.width * dpr;
+    closingCanvas.height = rect.height * dpr;
+    closingCanvas.style.width = rect.width + 'px';
+    closingCanvas.style.height = rect.height + 'px';
+    closingCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function closingTick() {
+    if (!closingRunning || !closingCtx) return;
+
+    const rect = closingCanvas.parentElement.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    const diag = Math.sqrt(w * w + h * h);
+    const now = performance.now();
+
+    closingCtx.clearRect(0, 0, w, h);
+    closingCtx.fillStyle = '#000';
+    closingCtx.fillRect(0, 0, w, h);
+
+    const breathT = (now % closingGlow.BREATH_PERIOD) / closingGlow.BREATH_PERIOD;
+
+    for (let i = 0; i < closingGlow.GLOWS.length; i++) {
+        const g = closingGlow.GLOWS[i];
+        const phase = breathT * Math.PI * 2 + g.phaseOffset;
+        const breathVal = 0.5 + 0.5 * Math.sin(phase);
+
+        const radius = diag * (closingGlow.MIN_RADIUS_RATIO + (closingGlow.MAX_RADIUS_RATIO - closingGlow.MIN_RADIUS_RATIO) * breathVal);
+        const alpha = g.maxAlpha * (0.7 + 0.3 * breathVal);
+
+        const cx = w * g.cx;
+        const cy = h * g.cy;
+
+        const grad = closingCtx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+        const [r, gv, b] = g.color;
+        grad.addColorStop(0,   `rgba(${r},${gv},${b},${alpha.toFixed(4)})`);
+        grad.addColorStop(0.4, `rgba(${r},${gv},${b},${(alpha * 0.5).toFixed(4)})`);
+        grad.addColorStop(1,   `rgba(${r},${gv},${b},0)`);
+
+        closingCtx.fillStyle = grad;
+        closingCtx.fillRect(0, 0, w, h);
+    }
+
+    closingRafId = requestAnimationFrame(closingTick);
+}
+
+function startClosingGlow() {
+    if (closingRunning) return;
+    if (!closingCanvas && !initClosingCanvas()) return;
+    resizeClosingCanvas();
+    closingRunning = true;
+    closingRafId = requestAnimationFrame(closingTick);
+}
+
+function stopClosingGlow() {
+    closingRunning = false;
+    if (closingRafId) { cancelAnimationFrame(closingRafId); closingRafId = null; }
+}
+
+function initClosingObserver() {
+    const section = document.getElementById('chart-final');
+    if (!section) return;
+
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                startClosingGlow();
+            } else {
+                stopClosingGlow();
+            }
+        });
+    }, { threshold: 0.05 });
+
+    obs.observe(section);
+}
+
 // Initialize the final chart section
 function initializeFinalChart() {
-    console.log('🚀 Initializing Final Chart section...');
+    console.log('Initializing Final Chart section...');
 
-    // Get the chart container
     const chartContainer = document.getElementById('chart-final');
     if (!chartContainer) {
         console.warn('Final chart container not found');
         return;
     }
 
-    // Set the byline date
     const bylineDate = document.getElementById('byline-date');
     if (bylineDate) {
         bylineDate.textContent = 'January 2026';
     }
 
-    // Initialize scroll animations
     initializeScrollAnimations();
+    initClosingCanvas();
+    initClosingObserver();
 
-    console.log('✅ Final chart initialized successfully');
-    console.log('📊 Data Totals:', realTotals);
+    console.log('Final chart initialized');
 }
 
 // Initialize when DOM is ready

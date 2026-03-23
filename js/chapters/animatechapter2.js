@@ -122,13 +122,15 @@ function animateChapter2(map, chapterConfig) {
     let total = 0;
     let startT = null;
     let running = false;
+    let active = false;
     let dataLoaded = false;
 
     let aoi1Markers = [];
     let aoi2Markers = [];
     let mainPopup = null;
-    let bargePopups = [];    // Individual popups for each barge image
-    let sarPopup = null;     // SAR image popup
+    let bargePopups = [];
+    let sarPopup = null;
+    let pendingTimeouts = [];
 
     // ============================================================================
     // INJECT STYLES
@@ -427,7 +429,10 @@ function animateChapter2(map, chapterConfig) {
     }
 
     function clearAll() {
+        active = false;
         stopAnim();
+        pendingTimeouts.forEach(id => clearTimeout(id));
+        pendingTimeouts = [];
         clearMarkers();
         clearLayers();
         progress = 0;
@@ -581,6 +586,7 @@ function animateChapter2(map, chapterConfig) {
     async function showAOI1() {
         console.log('  -> showAOI1 (Main Scroll - Guangzhou Shipyard)');
         clearAll();
+        active = true;
 
         await loadData();
         injectStyles();
@@ -609,6 +615,7 @@ function animateChapter2(map, chapterConfig) {
     async function showCourse() {
         console.log('  -> showCourse (H1 Scroll - Nansan Island Beach)');
         clearAll();
+        active = true;
 
         await loadData();
         injectStyles();
@@ -706,9 +713,10 @@ function animateChapter2(map, chapterConfig) {
             console.log('  Course line complete');
 
             // After delay, show markers
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
+                if (!active) return;
                 showBargeMarkersAndBridge();
-            }, ANIM.MARKER_DELAY);
+            }, ANIM.MARKER_DELAY));
         }
     }
 
@@ -722,26 +730,27 @@ function animateChapter2(map, chapterConfig) {
         // Create 3 barge markers with WHITE glow (dock formation)
         // SVG points right (3 o'clock), 10 o'clock = -150° CSS rotation
         AOI2.BARGES.forEach((barge, index) => {
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
+                if (!active) return;
                 const marker = createSVGMarker(barge.lng, barge.lat, -150, true);
                 aoi2Markers.push(marker);
-            }, index * 200);
+            }, index * 200));
         });
 
-        // Add Bailey Bridge after markers appear
-        setTimeout(() => {
+        pendingTimeouts.push(setTimeout(() => {
+            if (!active) return;
             addBaileyBridge();
             
-            // Show all 3 barge images in one horizontal row popup
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
+                if (!active) return;
                 showBargeImagesRow();
-            }, 300);
+            }, 300));
 
-            // Show SAR image after barge images
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
+                if (!active) return;
                 showSARImage();
-            }, 500);
-        }, ANIM.BRIDGE_DELAY + 600);
+            }, 500));
+        }, ANIM.BRIDGE_DELAY + 600));
     }
 
     // ============================================================================

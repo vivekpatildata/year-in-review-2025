@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SynMax Theia Year in Review 2025 - Global Maritime Intelligence Coverage">
     <meta name="theme-color" content="#0a0f1a">
     <link rel="icon" type="image/png" href="LOGO-synmax (2).png">
@@ -92,6 +92,55 @@
         <div id="map-container" class="map-container">
             <div id="map" class="map"></div>
             
+            <!-- Intro Overlay: breathing gradient + text on black (covers map during intro) -->
+            <div id="intro-overlay" class="intro-overlay">
+                <canvas id="intro-particles-canvas"></canvas>
+                <div class="intro-screen" id="intro-screen">
+                    <div class="intro-screen-inner">
+
+                        <div class="intro-eyebrow">THEIA YEAR IN REVIEW</div>
+
+                        <p class="intro-headline">In a year when the world's oceans grew more contested, more complex, and more consequential than ever, Theia delivered the clarity that matters most. Built on a foundation of <mark class="intro-highlight" data-hl="1"><em>evidence</em>, not guesswork</mark>.</p>
+
+                        <div class="intro-divider"></div>
+
+                        <p class="intro-body">Over the past twelve months, SynMax's maritime intelligence platform processed over <mark class="intro-highlight intro-highlight--data" data-hl="2"><strong>130 million square kilometres</strong></mark> of satellite imagery every single day, fusing optical, SAR, and AIS data into a single, unified intelligence picture, going beyond the limits of traditional tracking and reporting systems of the world's marine environment.</p>
+
+                        <div class="intro-metrics">
+                            <div class="intro-metric">
+                                <span class="intro-metric-value">33M+</span>
+                                <span class="intro-metric-label">Vessel Detections</span>
+                                <span class="intro-metric-sub">since 2024</span>
+                            </div>
+                            <div class="intro-metric">
+                                <span class="intro-metric-value">13M+</span>
+                                <span class="intro-metric-label">Vessels Identified</span>
+                                <span class="intro-metric-sub">& attributed</span>
+                            </div>
+                            <div class="intro-metric">
+                                <span class="intro-metric-value">164K+</span>
+                                <span class="intro-metric-label">Dark Ship Detections</span>
+                                <span class="intro-metric-sub">invisible to AIS</span>
+                            </div>
+                        </div>
+
+                        <p class="intro-body">We caught more than <mark class="intro-highlight intro-highlight--data" data-hl="3"><strong>59,000 instances of AIS spoofing</strong></mark>, vessels deliberately broadcasting their locations in ways inconsistent with satellite detections. We also tracked nearly <mark class="intro-highlight intro-highlight--data" data-hl="4"><strong>136,000 ship-to-ship transfer events</strong></mark> through imagery alone, shining a light on activity that often takes place far from shore and far from scrutiny.</p>
+
+                        <div class="intro-divider"></div>
+
+                        <p class="intro-body intro-body-emphasis" id="intro-emphasis-para">But the real story of this year isn't just about what we measured. It's about what that intelligence made possible: for the analysts, operators, and decision-makers who depend on knowing what's <em>actually</em> happening at sea, not what someone's transponder claims is happening including when AIS-reported positions are inconsistent with observed vessel activity.</p>
+
+                        <p class="intro-body">Fusing over <mark class="intro-highlight intro-highlight--data" data-hl="6"><strong>10+ datasets</strong></mark> to deliver real insights: from sanctions enforcement to maritime security, from counter-narcotics operations to protecting marine ecosystems. Theia didn't just monitor the maritime domain this year; it <mark class="intro-highlight" data-hl="7">redefined what's possible</mark> in understanding it.</p>
+
+                        <div class="intro-tagline">
+                            <img src="LOGO-synmax (2).png" alt="SynMax" class="intro-tagline-logo">
+                            <span class="intro-tagline-text" id="intro-tagline-text">Why Guess When You Can Know</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
             <!-- Timeline Bar (Fixed) - Redesigned -->
             <div id="timeline-container" class="timeline-container">
                 <div class="timeline-wrapper">
@@ -118,13 +167,13 @@
             </div>
             
             <!-- Mini Map (Top Right) - Akademik Gubkin Style -->
-            <div id="mini-map-container" class="mini-map-container">
+            <div id="mini-map-container" class="mini-map-container hidden">
                 <div id="mini-map" class="mini-map"></div>
                 <div class="map-label">GLOBAL POSITION</div>
             </div>
             
             <!-- Vessel Info Panel - Shows vessel details per chapter -->
-            <div class="vessel-info-panel" id="vessel-info-panel">
+            <div class="vessel-info-panel hidden" id="vessel-info-panel">
                 <!-- Primary Vessel -->
                 <div class="vessel-block" id="vessel-block-1">
                     <div class="info-item">
@@ -194,50 +243,7 @@
             
             <!-- ========== CHAPTER 0: INTRO ========== -->
             <div class="step" data-chapter="intro" data-scroll-type="vertical">
-                <div class="chapter-card align-center intro-card">
-                    <div class="card-content intro-content">
-
-                        <div class="intro-eyebrow">THEIA YEAR IN REVIEW</div>
-
-                        <p class="intro-headline">In a year when the world's oceans grew more contested, more complex, and more consequential than ever, Theia delivered the clarity that matters most. Built on a foundation of <mark class="intro-highlight" data-hl="1"><em>evidence</em>, not guesswork</mark>.</p>
-
-                        <div class="intro-divider"></div>
-
-                        <p class="intro-body">Over the past twelve months, SynMax's maritime intelligence platform processed over <mark class="intro-highlight intro-highlight--data" data-hl="2"><strong>130 million square kilometres</strong></mark> of satellite imagery every single day, fusing optical, SAR, and AIS data into a single, unified intelligence picture, going beyond the limits of traditional tracking and reporting systems of the world's marine environment.</p>
-
-                        <div class="intro-metrics">
-                            <div class="intro-metric">
-                                <span class="intro-metric-value">33M+</span>
-                                <span class="intro-metric-label">Vessel Detections</span>
-                                <span class="intro-metric-sub">since 2024</span>
-                            </div>
-                            <div class="intro-metric">
-                                <span class="intro-metric-value">13M+</span>
-                                <span class="intro-metric-label">Vessels Identified</span>
-                                <span class="intro-metric-sub">& attributed</span>
-                            </div>
-                            <div class="intro-metric">
-                                <span class="intro-metric-value">164K+</span>
-                                <span class="intro-metric-label">Dark Ship Detections</span>
-                                <span class="intro-metric-sub">invisible to AIS</span>
-                            </div>
-                        </div>
-
-                        <p class="intro-body">We caught more than <mark class="intro-highlight intro-highlight--data" data-hl="3"><strong>59,000 instances of AIS spoofing</strong></mark>, vessels deliberately broadcasting their locations in ways inconsistent with satellite detections. We also tracked nearly <mark class="intro-highlight intro-highlight--data" data-hl="4"><strong>136,000 ship-to-ship transfer events</strong></mark> through imagery alone, shining a light on activity that often takes place far from shore and far from scrutiny.</p>
-
-                        <div class="intro-divider"></div>
-
-                        <p class="intro-body intro-body-emphasis">But the real story of this year isn't just about what we measured. It's about what that intelligence made possible: for the analysts, operators, and decision-makers who depend on knowing what's <mark class="intro-highlight" data-hl="5"><em>actually</em> happening at sea</mark>, not what someone's transponder claims is happening including when AIS-reported positions are inconsistent with observed vessel activity.</p>
-
-                        <p class="intro-body">Fusing over <mark class="intro-highlight intro-highlight--data" data-hl="6"><strong>10+ datasets</strong></mark> to deliver real insights: from sanctions enforcement to maritime security, from counter-narcotics operations to protecting marine ecosystems. Theia didn't just monitor the maritime domain this year; it <mark class="intro-highlight" data-hl="7">redefined what's possible</mark> in understanding it.</p>
-
-                        <div class="intro-tagline">
-                            <img src="LOGO-synmax (2).png" alt="SynMax" class="intro-tagline-logo">
-                            <span class="intro-tagline-text">Why Guess When You Can Know</span>
-                        </div>
-
-                    </div>
-                </div>
+                <!-- Content lives in #intro-overlay; this step is just a scroll trigger -->
             </div>
             
             <!-- ========== CHAPTER 1: JANUARY - TASCA ========== -->
@@ -1310,6 +1316,7 @@
          Purpose: Regional Summary Statistics + Narrative
     ============================================= -->
     <section id="chart-final" class="stats-section">
+        <canvas id="closing-canvas"></canvas>
         <div class="final-chart-container">
             <img src="LOGO-synmax (2).png" alt="SynMax" class="final-chart-logo">
 

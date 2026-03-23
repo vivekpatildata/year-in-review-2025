@@ -754,17 +754,17 @@ function animateChapter9(map, chapterConfig) {
                 <span>ARCTIC VOSTOK AIS Track</span>
             </div>
             <div class="ch9-legend-item">
-                <img class="ch9-legend-icon" src="lightdetection.svg" alt="">
+                <img class="ch9-legend-icon" src="assets/svg/lightdetection.svg" alt="">
                 <span>Light Detection</span>
             </div>
             <div class="ch9-legend-item">
-                <img class="ch9-legend-icon" src="bunkering.svg" alt="">
+                <img class="ch9-legend-icon" src="assets/svg/bunkering.svg" alt="">
                 <span>Bunkering Detection</span>
             </div>
         `;
 
         document.body.appendChild(legend);
-        setTimeout(() => legend.classList.add('visible'), 100);
+        pendingTimeouts.push(setTimeout(() => legend.classList.add('visible'), 100));
     }
 
     // ============================================================================
@@ -827,11 +827,11 @@ function animateChapter9(map, chapterConfig) {
             CONFIG.BUNKERING_MKR_LABEL,
             CONFIG.BUNKERING_MKR_SUBLABEL
         );
-        setTimeout(() => {
+        pendingTimeouts.push(setTimeout(() => {
             showMarker(bunkeringMkr);
             showPopup(bunkeringPopup);
             bunkeringMkrShown = true;
-        }, 300);
+        }, 300));
 
         // Create legend
         createLegend();
@@ -1184,10 +1184,10 @@ function animateChapter9(map, chapterConfig) {
                 CONFIG.LIGHT_MKR_2_LABEL,
                 CONFIG.LIGHT_MKR_2_SUBLABEL
             );
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
                 showMarker(lightMkr2);
                 showPopup(lightPopup2);
-            }, 50);
+            }, 50));
         }
 
         // Light Detection 3: Beihai (~90% through track) - WHITE TINT ATTENTION
@@ -1216,10 +1216,10 @@ function animateChapter9(map, chapterConfig) {
                 .setLngLat([CONFIG.BEIHAI_TERMINAL[0], CONFIG.BEIHAI_TERMINAL[1] + 0.15])  // Slightly above
                 .addTo(map);
             
-            setTimeout(() => {
+            pendingTimeouts.push(setTimeout(() => {
                 showMarker(lightMkr3);
                 showPopup(lightPopup3);
-            }, 50);
+            }, 50));
         }
 
         if (pct >= 1) {

@@ -218,9 +218,9 @@
            description: 'ARCTIC VOSTOK sanctioned LNG to China'
        },
        october: {
-           start: 'AUG 29, 2025',
-           end: 'OCT 02, 2025',
-           description: 'LNG PHECDA infrastructure loitering'
+           start: 'SEP 25, 2025',
+           end: 'OCT 20, 2025',
+           description: 'FALCON Part 2 - Strait of Hormuz to Gulf of Aden'
        },
        november: {
            start: 'JUL 16, 2025',
