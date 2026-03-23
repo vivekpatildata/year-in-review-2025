@@ -93,9 +93,9 @@ function animateChapter2(map, chapterConfig) {
     // ============================================================================
 
     const ANIM = {
-        COURSE_DURATION: 1500,          // Path animation speed (ms)
-        MARKER_DELAY: 800,              // Delay before showing markers after line completes
-        BRIDGE_DELAY: 400,              // Delay before showing bridge after markers
+        COURSE_DURATION: 450,
+        MARKER_DELAY: 100,
+        BRIDGE_DELAY: 50,
         AOI_DASH: [8, 4],               // AOI border dash pattern
         COURSE_DASH: [4, 6],            // Course line dash pattern (dotted)
     };
@@ -734,7 +734,7 @@ function animateChapter2(map, chapterConfig) {
                 if (!active) return;
                 const marker = createSVGMarker(barge.lng, barge.lat, -150, true);
                 aoi2Markers.push(marker);
-            }, index * 200));
+            }, index * 50));
         });
 
         pendingTimeouts.push(setTimeout(() => {
@@ -744,13 +744,13 @@ function animateChapter2(map, chapterConfig) {
             pendingTimeouts.push(setTimeout(() => {
                 if (!active) return;
                 showBargeImagesRow();
-            }, 300));
+            }, 60));
 
             pendingTimeouts.push(setTimeout(() => {
                 if (!active) return;
                 showSARImage();
-            }, 500));
-        }, ANIM.BRIDGE_DELAY + 600));
+            }, 130));
+        }, ANIM.BRIDGE_DELAY + 120));
     }
 
     // ============================================================================
