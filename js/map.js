@@ -261,8 +261,8 @@
                vessel1: {
                    name: 'JACK-UP BARGES (×3)',
                    imo: 'N/A',
-                   cargo: 'CONSTRUCTION',
-                   operation: 'DARK DEPARTURE'
+                   cargo: 'BARGES',
+                   operation: 'SEA TRIAL'
                }
            },
            dataFile: 'data/chapter2-barges.geojson',
@@ -293,8 +293,7 @@
            subChapterAction: 'showCourse',  // Triggers showCourse() in animatechapter2
            layers: [],
            legend: [
-               { type: 'svg', icon: 'assets/svg/unattributed.svg', label: 'Barge Position' },
-               { type: 'line', color: '#ffffff', label: 'Bailey Bridge' },
+               { type: 'svg', icon: 'assets/svg/unattributed.svg', label: 'Unattributed Detection' },
                { type: 'line', color: '#E8A0A0', label: 'Assessed Course', style: 'dotted' },
                { type: 'area', color: '#ffaa00', label: 'Area of Interest' }
            ],
@@ -302,8 +301,8 @@
                vessel1: {
                    name: 'JACK-UP BARGES (×3)',
                    imo: 'N/A',
-                   cargo: 'AMPHIBIOUS OPS',
-                   operation: 'DOCK FORMATION'
+                   cargo: 'BARGES',
+                   operation: 'TRIALS'
                }
            },
            dataFile: 'data/chapter2-barges.geojson',
@@ -342,8 +341,8 @@
                vessel1: {
                    name: 'JACK-UP BARGES',
                    imo: 'N/A',
-                   cargo: 'CONSTRUCTION',
-                   operation: 'ARTIFICIAL DOCK'
+                   cargo: 'BARGES',
+                   operation: 'TRIALS'
                }
            },
            dataFile: null,
@@ -491,7 +490,7 @@
                vessel1: {
                    name: 'KIBA',
                    imo: '9200445',
-                   cargo: 'IRAN BULK',
+                   cargo: 'BULK CARRIER',
                    operation: '38D TRANSIT'
                }
            },
@@ -611,13 +610,13 @@
                { type: 'line', color: '#00ff88', label: 'MATROS SHEVCHENKO Assessed Course', style: 'dotted' },
                { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
                { type: 'svg', icon: 'assets/svg/darkdetection.svg', label: 'Dark Detection' },
-               { type: 'svg', icon: 'assets/svg/humintdetection.svg', label: 'HUMINT Detection' }
+               { type: 'svg', icon: 'assets/svg/humintdetection.svg', label: 'Bosphorus Detection' }
            ],
            vesselInfo: {
                vessel1: {
                    name: 'MATROS SHEVCHENKO',
                    imo: '9574195',
-                   cargo: 'GRAIN',
+                   cargo: 'BULK CARRIER',
                    operation: 'DARK TRANSIT'
                }
            },
@@ -653,7 +652,7 @@
                vessel1: {
                    name: 'ZHU HAI YUN',
                    imo: '9947055',
-                   cargo: 'AUTONOMOUS',
+                   cargo: '',
                    operation: 'SURVEY TRANSIT'
                }
            },
@@ -681,13 +680,13 @@
            layers: [],
            legend: [
                { type: 'line', color: '#00ff88', label: 'ARCTIC VOSTOK AIS Track' },
-               { type: 'svg', icon: 'assets/svg/bunkering.svg', label: 'STS / Bunkering Detection' }
+               { type: 'svg', icon: 'assets/svg/bunkering.svg', label: 'Light STS Detection' }
            ],
            vesselInfo: {
                vessel1: {
                    name: 'KORYAK FSU',
                    imo: '9915105',
-                   cargo: 'LNG STORAGE',
+                   cargo: 'LNG',
                    operation: 'STS TRANSFER'
                },
                vessel2: {
@@ -838,7 +837,7 @@
                { type: 'line', color: '#00ff88', label: 'DUNE Assessed Path', style: 'dotted' },
                { type: 'line', color: '#6cb4ee', label: 'STELLAR ORACLE (KSECOND) Track' },
                { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
-               { type: 'svg', icon: 'assets/svg/bunkering.svg', label: 'AIS Light STS Detection' }
+               { type: 'svg', icon: 'assets/svg/darksts.png', label: 'Dark STS Detection' }
            ],
            vesselInfo: {
                vessel1: {
@@ -851,7 +850,7 @@
                    name: 'STELLAR ORACLE',
                    imo: '9194127',
                    cargo: 'CRUDE OIL',
-                   operation: 'SPOOFING AS KSECOND'
+                   operation: 'FALSE IDENTITY'
                }
            },
            dataFile: 'data/chapter11-dune.geojson',
@@ -879,18 +878,17 @@
            subChapterAction: 'showH2',
            layers: [],
           legend: [
-              { type: 'line', color: '#00ff88', label: 'DUNE AIS Track' },
               { type: 'line', color: '#6cb4ee', label: 'STELLAR ORACLE (KSECOND) Track' },
               { type: 'line', color: '#a78bfa', label: 'STELLAR ORACLE (SINCON) Track' },
               { type: 'svg', icon: 'assets/svg/lightdetection.svg', label: 'Light Detection' },
-              { type: 'svg', icon: 'assets/svg/transmissionchange.svg', label: 'Transmission Change' }
+              { type: 'svg', icon: 'assets/svg/transmissionchange.svg', label: 'Name Change' }
           ],
           vesselInfo: {
               vessel1: {
                   name: 'STELLAR ORACLE',
                   imo: '9194127',
                   cargo: 'CRUDE OIL',
-                  operation: 'SPOOFING AS SINCON'
+                  operation: 'FALSE IDENTITY'
               }
           },
           dataFile: 'data/chapter11-sincon.geojson',
@@ -1118,7 +1116,7 @@
        container.innerHTML = `
            <div class="split-map-left">
                <div id="split-map-left" class="map"></div>
-               <div class="split-map-label">AIS OFF · GRAIN LOADING</div>
+               <div class="split-map-label">AIS OFF · LOADING</div>
                <div class="split-map-number">1</div>
            </div>
            <div class="split-screen-divider"></div>
@@ -3136,8 +3134,62 @@
        
        if (vesselEl) vesselEl.textContent = data?.name || '—';
        if (imoEl) imoEl.textContent = data?.imo || '—';
-       if (cargoEl) cargoEl.textContent = data?.cargo || '—';
-       if (operationEl) operationEl.textContent = data?.operation || '—';
+       if (cargoEl) {
+           const cargo = data?.cargo;
+           if (cargo === '') {
+               cargoEl.textContent = '';
+               const row = cargoEl.closest('.info-item');
+               if (row) {
+                   row.style.display = 'none';
+                   const prevDivider = row.previousElementSibling;
+                   if (prevDivider && prevDivider.classList.contains('info-divider')) {
+                       prevDivider.style.display = 'none';
+                   }
+                   const nextDivider = row.nextElementSibling;
+                   if (nextDivider && nextDivider.classList.contains('info-divider')) {
+                       nextDivider.style.display = 'none';
+                   }
+               }
+           } else {
+               cargoEl.textContent = cargo || '—';
+               const row = cargoEl.closest('.info-item');
+               if (row) {
+                   row.style.display = '';
+                   const prevDivider = row.previousElementSibling;
+                   if (prevDivider && prevDivider.classList.contains('info-divider')) {
+                       prevDivider.style.display = '';
+                   }
+                   const nextDivider = row.nextElementSibling;
+                   if (nextDivider && nextDivider.classList.contains('info-divider')) {
+                       nextDivider.style.display = '';
+                   }
+               }
+           }
+       }
+       if (operationEl) {
+           const op = data?.operation;
+           if (op === '') {
+               operationEl.textContent = '';
+               const row = operationEl.closest('.info-item');
+               if (row) {
+                   row.classList.add('hidden');
+                   const divider = row.previousElementSibling;
+                   if (divider && divider.classList.contains('info-divider')) {
+                       divider.classList.add('hidden');
+                   }
+               }
+           } else {
+               operationEl.textContent = op ?? '—';
+               const row = operationEl.closest('.info-item');
+               if (row) {
+                   row.classList.remove('hidden');
+                   const divider = row.previousElementSibling;
+                   if (divider && divider.classList.contains('info-divider')) {
+                       divider.classList.remove('hidden');
+                   }
+               }
+           }
+       }
    }
    
    /**
@@ -3237,7 +3289,8 @@
            } else if (item.type === 'area') {
                const area = document.createElement('div');
                area.className = 'legend-dot';
-               area.style.background = item.color;
+               area.style.background = 'transparent';
+               area.style.border = `1.5px dashed ${item.color}`;
                area.style.borderRadius = '2px';
                iconEl.appendChild(area);
            } else if (item.type === 'svg') {

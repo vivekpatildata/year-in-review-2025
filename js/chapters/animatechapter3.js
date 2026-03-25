@@ -78,9 +78,9 @@ function animateChapter3(map, chapterConfig) {
     // ============================================================================
 
     const H1_MARKERS = {
-        // Light detection markers along the route (coordinates on the actual track linestring)
-        DETECTION_1: { lng: 76.25166666666668, lat: 7.465 },        // Indian Ocean (20% of H1)
-        DETECTION_2: { lng: 100.08500000000001, lat: 3.5566666666666666 },  // Strait of Malacca (55% of H1)
+        // Light detection markers along the route (vertices matching ~20% / ~55% of H1 segment = on AIS track)
+        DETECTION_1: { lng: 76.28666666666666, lat: 7.45 },        // Indian Ocean (20% of H1)
+        DETECTION_2: { lng: 100.11665333333333, lat: 3.529233333333333 },  // Strait of Malacca (55% of H1)
         DETECTION_3: { lng: 107.14608, lat: 20.83408166666667 },    // Ha Long Bay - last point of track
 
         // Vietnam endpoint satellite image
@@ -894,20 +894,17 @@ function animateChapter3(map, chapterConfig) {
             // Calculate progress within H1 portion (mainEndIndex to end)
             const h1Pct = (progress - mainEndIndex) / remainingPoints;
 
-            // Detection 1 - Around 20% of H1 track (Indian Ocean)
-            // SVG points right (3 o'clock), 4 o'clock = 30°
+            // Detection 1 - Around 20% of H1 track (Indian Ocean) - track heads east ~3 o'clock
             if (h1Pct >= 0.2 && !h1Mkr1) {
                 const el1 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center', rotation: 30 })
+                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center', rotation: 24, offset: [4, 3] })
                     .setLngLat([H1_MARKERS.DETECTION_1.lng, H1_MARKERS.DETECTION_1.lat])
                     .addTo(map);
             }
 
-            // Detection 2 - Around 55% of H1 track (Near Singapore)
-            // SVG points right (3 o'clock), 4 o'clock = 30°
             if (h1Pct >= 0.55 && !h1Mkr2) {
                 const el2 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center', rotation: 30 })
+                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center', rotation: 38, offset: [4, 3] })
                     .setLngLat([H1_MARKERS.DETECTION_2.lng, H1_MARKERS.DETECTION_2.lat])
                     .addTo(map);
             }
@@ -950,13 +947,13 @@ function animateChapter3(map, chapterConfig) {
             // Ensure all markers are placed at their exact coordinates
             if (!h1Mkr1) {
                 const el1 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center', rotation: 30 })
+                h1Mkr1 = new mapboxgl.Marker({ element: el1, anchor: 'center', rotation: 24, offset: [4, 3] })
                     .setLngLat([H1_MARKERS.DETECTION_1.lng, H1_MARKERS.DETECTION_1.lat])
                     .addTo(map);
             }
             if (!h1Mkr2) {
                 const el2 = createLightMarker(CONFIG.SVG_LIGHT);
-                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center', rotation: 30 })
+                h1Mkr2 = new mapboxgl.Marker({ element: el2, anchor: 'center', rotation: 38, offset: [4, 3] })
                     .setLngLat([H1_MARKERS.DETECTION_2.lng, H1_MARKERS.DETECTION_2.lat])
                     .addTo(map);
             }

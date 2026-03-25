@@ -951,39 +951,25 @@ function animateChapter12(map, chapterConfig) {
         console.log('  Phase 0: Spoofing marker');
         showSpoofingMarker();
 
-        // === PHASE 1: Dotted line from spoof → DET_1, then show DET_1 ===
+        // === PHASE 1: Show DET_1 directly (no dotted line from spoof) ===
         safeSetTimeout(() => {
             if (!running) return;
-            console.log('  Phase 1: Dotted → DET_1');
+            console.log('  Phase 1: Show DET_1 directly');
 
-            // Waypoints from spoof location to Jose Terminal
-            // Route: go NW past Tobago, north of Trinidad, then west along Venezuela coast
-            animateAssessedPath(
-                [CONFIG.SKIPPER_AIS_START],
-                [
-                    [-58.5, 9.8],       // NW from spoof, approaching Tobago from south
-                    [-60.2, 11.0],      // Pass north of Tobago into Caribbean Sea
-                    [-61.5, 11.2],      // North of Trinidad, open water
-                    [-63.0, 11.0],      // Continue west, north of Margarita Island
-                    [-64.2, 10.6],      // Approach Jose from the north, staying offshore
-                    CONFIG.DET_1        // Jose Terminal
-                ],
-                () => {
-                    if (!running) return;
-                    showDetection1();
+            showDetection1();
+            assessedCoordsSoFar = [CONFIG.DET_1];
 
-                    // === PHASE 2: Dotted line → DET_2, then show DET_2 ===
-                    safeSetTimeout(() => {
+            // === PHASE 2: Dotted line → DET_2, then show DET_2 ===
+            safeSetTimeout(() => {
+                if (!running) return;
+                console.log('  Phase 2: Dotted → DET_2');
+
+                animateAssessedSegment(
+                    getCurrentAssessedCoords(),
+                    CONFIG.DET_2,
+                    () => {
                         if (!running) return;
-                        console.log('  Phase 2: Dotted → DET_2');
-
-                        // DET_1 and DET_2 are very close (same area), direct segment
-                        animateAssessedSegment(
-                            getCurrentAssessedCoords(),
-                            CONFIG.DET_2,
-                            () => {
-                                if (!running) return;
-                                showDetection2();
+                        showDetection2();
 
                                 // === PHASE 3: Dotted line → DET_3 (via waypoints), then show DET_3 ===
                                 safeSetTimeout(() => {
@@ -1045,9 +1031,7 @@ function animateChapter12(map, chapterConfig) {
                                 }, CONFIG.PHASE_DELAY);
                             }
                         );
-                    }, CONFIG.PHASE_DELAY);
-                }
-            );
+            }, CONFIG.PHASE_DELAY);
         }, CONFIG.PHASE_DELAY);
     }
 
@@ -1107,8 +1091,8 @@ function animateChapter12(map, chapterConfig) {
     function showDetection2() {
         console.log('  Phase 1: Detection 2 - SKIPPER anchored near Jose (19 Nov - 04 Dec)');
 
-        // Dark detection marker with red glow - heading: anchored/NW facing (315°)
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_2, 'ch12-dark-marker', -30);
+        // Dark detection marker with red glow - heading: 1 o'clock (-60°)
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_2, 'ch12-dark-marker', -75);
 
         // Number marker
         const numMkr = createNumberMarker('2', CONFIG.DET_2);
@@ -1161,8 +1145,8 @@ function animateChapter12(map, chapterConfig) {
     function showDetection4() {
         console.log('  Phase 4: Detection 4 - SKIPPER (AIS dark) heading east (08 Dec)');
 
-        // Dark detection marker with red glow - heading: 10 o'clock (SVG points right, +210° CSS)
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_4, 'ch12-dark-marker', 210);
+        // Dark detection marker with red glow - heading: 4 o'clock (30°)
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_4, 'ch12-dark-marker', -150);
 
         // Number marker
         const numMkr = createNumberMarker('4', CONFIG.DET_4);

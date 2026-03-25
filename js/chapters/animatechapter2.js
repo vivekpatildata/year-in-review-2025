@@ -136,12 +136,50 @@ function animateChapter2(map, chapterConfig) {
     // INJECT STYLES
     // ============================================================================
 
+    /**
+     * Sidebar legend (#legend-container) is built by map.js from chapter config.
+     * Patch AOI row to a dashed square SVG; on H1 scroll fix legacy labels if present.
+     */
+    function patchChapter2SidebarLegend(mode) {
+        const container = document.getElementById('legend-container');
+        if (!container || container.classList.contains('hidden')) return;
+
+        const stroke = COLORS.AOI_BORDER;
+        const aoiMarkup = `<svg class="ch2-legend-aoi-svg" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" fill="none" stroke="${stroke}" stroke-width="1.5" stroke-dasharray="3 2"/></svg>`;
+
+        container.querySelectorAll('.legend-item').forEach(item => {
+            const labelEl = item.querySelector('.legend-label');
+            if (!labelEl) return;
+            const text = labelEl.textContent.trim();
+
+            if (text === 'Area of Interest') {
+                const icon = item.querySelector('.legend-icon');
+                if (icon) icon.innerHTML = aoiMarkup;
+            }
+
+            if (mode === 'h1') {
+                if (text === 'Barge Position') {
+                    labelEl.textContent = 'Unattributed Detection';
+                    const icon = item.querySelector('.legend-icon');
+                    if (icon) {
+                        icon.innerHTML = `<img src="${CONFIG.SVG_UNATTRIBUTED}" alt="" style="width:22px;height:auto;display:block;">`;
+                    }
+                }
+                if (text === 'Bailey Bridge' || text.includes('Bailey Bridge')) {
+                    item.remove();
+                }
+            }
+        });
+    }
+
     function injectStyles() {
         if (document.getElementById('ch2-css')) return;
 
         const css = document.createElement('style');
         css.id = 'ch2-css';
         css.textContent = `
+            .ch2-legend-aoi-svg { display: block; }
+
             /* === SVG MARKER CONTAINER === */
             .ch2-svg-marker {
                 cursor: pointer;
@@ -605,6 +643,8 @@ function animateChapter2(map, chapterConfig) {
         });
 
         console.log('  AOI1 displayed with 3 barge markers');
+
+        pendingTimeouts.push(setTimeout(() => patchChapter2SidebarLegend('main'), 0));
     }
 
     // ============================================================================
@@ -673,6 +713,8 @@ function animateChapter2(map, chapterConfig) {
         animateCourse();
 
         console.log('  Course animation started');
+
+        pendingTimeouts.push(setTimeout(() => patchChapter2SidebarLegend('h1'), 0));
     }
 
     // ============================================================================

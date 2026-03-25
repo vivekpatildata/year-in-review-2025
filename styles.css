@@ -1862,11 +1862,12 @@ body {
 /* Compact Timeline - Horizontal scrollable */
 .timeline-compact {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     overflow-x: auto;
     padding: 2px 0;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    flex-wrap: wrap;
 }
 
 .timeline-compact::-webkit-scrollbar {
@@ -1874,11 +1875,12 @@ body {
 }
 
 .timeline-item {
-    flex-shrink: 0;
+    flex: 1 1 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px 10px;
+    padding: 6px 6px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.04);
@@ -1900,6 +1902,32 @@ body {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.7);
     white-space: nowrap;
+}
+
+/* Chapter 6 (ETERNITY C): 2×2 grid so four milestones fit the compact card without horizontal scroll */
+.timeline-compact--grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 6px;
+    overflow-x: visible;
+}
+
+.timeline-compact--grid-2 .timeline-item {
+    flex-shrink: 1;
+    min-width: 0;
+    padding: 5px 6px;
+    gap: 2px;
+}
+
+.timeline-compact--grid-2 .t-date {
+    font-size: 8px;
+}
+
+.timeline-compact--grid-2 .t-event {
+    font-size: 9px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
 }
 
 /* Theia Insight - Radar scan effect design */
@@ -2602,6 +2630,14 @@ body {
     .timeline-compact {
         gap: 4px;
         padding: 4px 0;
+    }
+
+    .timeline-compact--grid-2 {
+        gap: 3px 5px;
+    }
+
+    .timeline-compact--grid-2 .timeline-item {
+        padding: 4px 5px;
     }
     
     .t-date {

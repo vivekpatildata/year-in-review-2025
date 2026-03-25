@@ -38,12 +38,12 @@ function animateChapter7(mapInput, chapterConfig) {
         // Dark Detection 1: Feodosia Bay - 17-19 Aug 2025 - Loading cargo
         DARK_MKR_1: [35.3880, 45.0304],      // Marker position
         DARK_MKR_1_LABEL: '17-19 Aug 2025',
-        DARK_MKR_1_SUBLABEL: 'Berthed at Feodosia - loading grain',
+        DARK_MKR_1_SUBLABEL: 'Berthed at Feodosia - LOADING',
 
-        // Dark Detection 2: Sevastopol - 09 Sep 2025 - Docked at grain silos
+        // Dark Detection 2: Sevastopol - 09 Sep 2025
         DARK_MKR_2: [33.5547, 44.6245],      // Marker position
         DARK_MKR_2_LABEL: '09 Sep 2025',
-        DARK_MKR_2_SUBLABEL: 'Berthed at Sevastopol grain silos',
+        DARK_MKR_2_SUBLABEL: 'Berthed at Sevastopol - LOADING',
 
         // HUMINT Detection: Bosphorus Strait - 13 Sep 2025 - Transiting after AIS resumed
         HUMINT_MKR: [29.05, 41.11],          // Marker position
@@ -95,10 +95,10 @@ function animateChapter7(mapInput, chapterConfig) {
             { coords: [35.3800, 45.0350], rotation: -45 },
             { coords: [35.4000, 45.0240], rotation: 30 },
             { coords: [35.3760, 45.0370], rotation: -30 },
-            { coords: [35.4040, 45.0220], rotation: 60 },
+            { coords: [35.4040, 45.0220], rotation: -60 },
             { coords: [35.3720, 45.0390], rotation: -60 },
             { coords: [35.4080, 45.0200], rotation: 90 },
-            { coords: [35.3680, 45.0410], rotation: -90 }
+            { coords: [35.3680, 45.0410], rotation: 180 }
         ],
         
         // --- ADDITIONAL DARK MARKERS AT SEVASTOPOL (5 more = 6 total, different headings) ---
@@ -106,7 +106,7 @@ function animateChapter7(mapInput, chapterConfig) {
             { coords: [33.5547, 44.6245], rotation: 0 },
             { coords: [33.5600, 44.6200], rotation: 25 },
             { coords: [33.5490, 44.6290], rotation: -25 },
-            { coords: [33.5650, 44.6160], rotation: 50 },
+            { coords: [33.5650, 44.6160], rotation: -120 },
             { coords: [33.5440, 44.6330], rotation: -50 },
             { coords: [33.5700, 44.6120], rotation: 75 }
         ]
@@ -584,7 +584,7 @@ function animateChapter7(mapInput, chapterConfig) {
     function createHumintMarker(svgFile) {
         const el = document.createElement('div');
         el.className = 'ch7-humint-marker';
-        el.innerHTML = `<img src="${svgFile}" alt="HUMINT detection marker">`;
+        el.innerHTML = `<img src="${svgFile}" alt="Bosphorus detection marker">`;
         return el;
     }
 
@@ -645,7 +645,7 @@ function animateChapter7(mapInput, chapterConfig) {
             </div>
             <div class="ch7-legend-item">
                 <img class="ch7-legend-icon" src="assets/svg/humintdetection.svg" alt="">
-                <span>HUMINT Detection</span>
+                <span>Bosphorus Detection</span>
             </div>
             <div class="ch7-legend-item">
                 <img class="ch7-legend-icon" src="assets/svg/lightdetection.svg" alt="">

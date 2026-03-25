@@ -759,7 +759,7 @@ function animateChapter9(map, chapterConfig) {
             </div>
             <div class="ch9-legend-item">
                 <img class="ch9-legend-icon" src="assets/svg/bunkering.svg" alt="">
-                <span>Bunkering Detection</span>
+                <span>Light STS Detection</span>
             </div>
         `;
 

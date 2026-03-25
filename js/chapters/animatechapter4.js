@@ -69,14 +69,14 @@ function animateChapter4(map, chapterConfig) {
         { COORDS: [54.9387, 25.7722] },   // Spoof 4: lat 25.7722, lng 54.9387
     ];
 
-    // Light Detection - Near Strait of Hormuz
+    // Light Detection - Near Strait of Hormuz (SVG default 3 o'clock; 180° = 9 o'clock)
     const LIGHT_DETECTION_MAIN = {
         COORDS: [54.9852, 26.1143],       // [lng, lat] - lat 26.1143, lng 54.9852
     };
 
-    // Light Detection - Exit point (after line animation starts)
+    // Light Detection - Exit point (after line animation starts) — on AIS track (segment snap)
     const LIGHT_DETECTION_EXIT = {
-        COORDS: [59.4570, 23.2565],       // [lng, lat]
+        COORDS: [59.457373, 23.256746],   // [lng, lat]
     };
 
     // ============================================================================
@@ -810,7 +810,7 @@ function animateChapter4(map, chapterConfig) {
 
         // === LIGHT DETECTION: Near Strait of Hormuz ===
         const lightElMain = createLightMarker(CONFIG.SVG_LIGHT);
-        lightDetMkrMain = new mapboxgl.Marker({ element: lightElMain, anchor: 'center' })
+        lightDetMkrMain = new mapboxgl.Marker({ element: lightElMain, anchor: 'center', rotation: 187 })
             .setLngLat(LIGHT_DETECTION_MAIN.COORDS)
             .addTo(map);
 
@@ -871,7 +871,7 @@ function animateChapter4(map, chapterConfig) {
             // Light Detection marker at exit point (~80% of main animation)
             if (mainPct >= 0.8 && !lightDetMkrExit) {
                 const lightEl = createLightMarker(CONFIG.SVG_LIGHT);
-                lightDetMkrExit = new mapboxgl.Marker({ element: lightEl, anchor: 'center' })
+                lightDetMkrExit = new mapboxgl.Marker({ element: lightEl, anchor: 'center', rotation: 30, offset: [3, 3] })
                     .setLngLat(LIGHT_DETECTION_EXIT.COORDS)
                     .addTo(map);
             }
@@ -893,7 +893,7 @@ function animateChapter4(map, chapterConfig) {
             // Ensure light detection marker at exit exists
             if (!lightDetMkrExit) {
                 const lightEl = createLightMarker(CONFIG.SVG_LIGHT);
-                lightDetMkrExit = new mapboxgl.Marker({ element: lightEl, anchor: 'center' })
+                lightDetMkrExit = new mapboxgl.Marker({ element: lightEl, anchor: 'center', rotation: 30, offset: [3, 3] })
                     .setLngLat(LIGHT_DETECTION_EXIT.COORDS)
                     .addTo(map);
             }

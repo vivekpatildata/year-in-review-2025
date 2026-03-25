@@ -1217,12 +1217,13 @@ function animateChapter11(map, chapterConfig) {
     // MARKER HELPERS
     // ============================================================================
 
-    function createSvgMarker(svgPath, lngLat, markerClass = '', rotation = 0) {
+    function createSvgMarker(svgPath, lngLat, markerClass = '', rotation = 0, offset = null) {
         const el = document.createElement('div');
         el.className = `ch11-svg-marker ${markerClass}`;
         el.innerHTML = `<img src="${svgPath}" alt="marker">`;
         const opts = { element: el, anchor: 'center' };
         if (rotation !== 0) opts.rotation = rotation;
+        if (offset) opts.offset = offset;
         const marker = new mapboxgl.Marker(opts)
             .setLngLat(lngLat)
             .addTo(map);
@@ -1366,20 +1367,12 @@ function animateChapter11(map, chapterConfig) {
                     <span class="legend-main">Light Detection</span>
                 </div>
                 <div class="ch11-legend-item">
-                    <div class="ch11-legend-icon"><img src="assets/svg/bunkering.svg" alt=""></div>
-                    <span class="legend-main">STS Detection</span>
+                    <div class="ch11-legend-icon"><img src="assets/svg/darksts.png" alt="" style="width:16px;height:auto;"></div>
+                    <span class="legend-main">Dark STS Detection</span>
                 </div>
             `;
         } else if (phase === 'h2') {
             legendItems = `
-                <div class="ch11-legend-item">
-                    <div class="ch11-legend-line solid-green"></div>
-                    <span class="legend-main">DUNE AIS Track</span>
-                </div>
-                <div class="ch11-legend-item">
-                    <div class="ch11-legend-line dashed-green"></div>
-                    <span class="legend-main">DUNE Assessed AIS Track</span>
-                </div>
                 <div class="ch11-legend-item">
                     <div class="ch11-legend-line solid-pink"></div>
                     <div class="legend-text">
@@ -1400,7 +1393,7 @@ function animateChapter11(map, chapterConfig) {
                 </div>
                 <div class="ch11-legend-item">
                     <div class="ch11-legend-icon"><img src="assets/svg/transmissionchange.svg" alt=""></div>
-                    <span class="legend-main">Transmission Change</span>
+                    <span class="legend-main">Name Change</span>
                 </div>
             `;
         }
@@ -1704,7 +1697,7 @@ function animateChapter11(map, chapterConfig) {
     function showDetection1() {
         console.log('  Detection 1: Dark detection at Jask, Iran');
 
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker', 30);
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker', -90);
         const numMkr = createNumberMarker('1', CONFIG.DET_1);
         const popup = createImagePopup(
             CONFIG.DET_1,
@@ -1753,7 +1746,7 @@ function animateChapter11(map, chapterConfig) {
         console.log('  Detection 3: STS with STELLAR ORACLE (white tint attention)');
 
         // Use primary marker with white tint glow for attention
-        const mkr = createStsMarkerPrimary('assets/svg/bunkering.svg', CONFIG.DET_3, 345);
+        const mkr = createStsMarkerPrimary('assets/svg/darksts.png', CONFIG.DET_3, 345);
         const numMkr = createNumberMarker('3', CONFIG.DET_3);
         // Use STS image popup with white tint glow holder
         const popup = createStsImagePopup(
@@ -1777,7 +1770,7 @@ function animateChapter11(map, chapterConfig) {
     function showDetection4() {
         console.log('  Detection 4: Light detection with sat image');
 
-        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_4, 'ch11-light-marker', -47.5);
+        const mkr = createSvgMarker('assets/svg/lightdetection.svg', CONFIG.DET_4, 'ch11-light-marker', -47.5, [3, 4]);
         const numMkr = createNumberMarker('4', CONFIG.DET_4);
         const popup = createImagePopup(
             CONFIG.DET_4,
