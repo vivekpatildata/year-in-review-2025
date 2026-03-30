@@ -82,8 +82,8 @@ function animateChapter10(map, chapterConfig) {
 
     // Group 2: Dark detection at Asaluyeh + sat image A
     const DARK_ASALUYEH = [
-        { COORDS: [52.5407, 27.5232], ROTATION: 150, IMAGE: 'images/chapter10/chapter10A.png', IMG_OFFSET: [-130, 200] },
-        { COORDS: [52.35, 27.35],     ROTATION: -60 },
+        { COORDS: [52.5407, 27.5232], ROTATION: -60, IMAGE: 'images/chapter10/chapter10A.png', IMG_OFFSET: [-130, 200] },
+        { COORDS: [52.35, 27.35],     ROTATION: -120 },
     ];
 
     // Group 3: Spoofing near Dubai
@@ -109,7 +109,7 @@ function animateChapter10(map, chapterConfig) {
     // Group 6: Dark detection at last AIS point (Gulf of Aden) + sat image D
     // Coordinates set to actual last AIS point from the geojson
     const DARK_ADEN = {
-        COORDS: [48.156667, 12.943333], ROTATION: 150,
+        COORDS: [48.156667, 12.943333], ROTATION: -88,
         IMAGE: 'images/chapter10/chapter10D.png', IMG_OFFSET: [-100, 0]
     };
 
@@ -340,6 +340,8 @@ function animateChapter10(map, chapterConfig) {
                 box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
                 opacity: 0;
                 transition: opacity 0.4s ease, transform 0.3s ease;
+                z-index: 10 !important;
+                position: relative;
             }
             .ch10-number-marker.visible {
                 opacity: 1;
@@ -648,6 +650,8 @@ function animateChapter10(map, chapterConfig) {
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center', offset: offset })
             .setLngLat(lngLat)
             .addTo(map);
+        const wrapper = marker.getElement().parentElement || marker.getElement();
+        wrapper.style.zIndex = '10';
         numberMarkers.push(marker);
         setTimeout(() => el.classList.add('visible'), 50);
         return marker;
@@ -670,9 +674,9 @@ function animateChapter10(map, chapterConfig) {
             shown.asal = true;
             const primary = DARK_ASALUYEH[0];
             addSvgMarker(CONFIG.SVG_DARK, primary.COORDS, 'ch10-dark-marker', primary.ROTATION);
+            addSvgMarker(CONFIG.SVG_DARK, DARK_ASALUYEH[1].COORDS, 'ch10-dark-marker', DARK_ASALUYEH[1].ROTATION);
             createNumberMarker('1', primary.COORDS);
             addImagePopup(primary.COORDS, primary.IMAGE, primary.IMG_OFFSET, 'ch10-dark-img-holder', 1);
-            addSvgMarker(CONFIG.SVG_DARK, DARK_ASALUYEH[1].COORDS, 'ch10-dark-marker', DARK_ASALUYEH[1].ROTATION);
         }
 
         // === Group 3: Spoofing near Dubai ===

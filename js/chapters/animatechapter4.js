@@ -810,7 +810,7 @@ function animateChapter4(map, chapterConfig) {
 
         // === LIGHT DETECTION: Near Strait of Hormuz ===
         const lightElMain = createLightMarker(CONFIG.SVG_LIGHT);
-        lightDetMkrMain = new mapboxgl.Marker({ element: lightElMain, anchor: 'center', rotation: 187 })
+        lightDetMkrMain = new mapboxgl.Marker({ element: lightElMain, anchor: 'center', rotation: 5 })
             .setLngLat(LIGHT_DETECTION_MAIN.COORDS)
             .addTo(map);
 

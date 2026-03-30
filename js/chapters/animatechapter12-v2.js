@@ -1146,7 +1146,7 @@ function animateChapter12(map, chapterConfig) {
         console.log('  Phase 4: Detection 4 - SKIPPER (AIS dark) heading east (08 Dec)');
 
         // Dark detection marker with red glow - heading: 4 o'clock (30°)
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_4, 'ch12-dark-marker', -150);
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_4, 'ch12-dark-marker', 30);
 
         // Number marker
         const numMkr = createNumberMarker('4', CONFIG.DET_4);

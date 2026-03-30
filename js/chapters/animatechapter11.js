@@ -1697,7 +1697,7 @@ function animateChapter11(map, chapterConfig) {
     function showDetection1() {
         console.log('  Detection 1: Dark detection at Jask, Iran');
 
-        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker', -90);
+        const mkr = createSvgMarker('assets/svg/darkdetection.svg', CONFIG.DET_1, 'ch11-dark-marker', 30);
         const numMkr = createNumberMarker('1', CONFIG.DET_1);
         const popup = createImagePopup(
             CONFIG.DET_1,
