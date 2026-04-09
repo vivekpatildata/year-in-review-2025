@@ -430,7 +430,7 @@
            title: 'KIBA',
            subtitle: 'AIS Spoofing at Asalouyeh',
            region: 'Gulf of Oman, Iran',
-           dateRange: { start: 'APR 30, 2025', end: 'MAY 20, 2025' },
+           dateRange: { start: 'APR 24, 2025', end: 'MAY 20, 2025' },
            camera: {
                center: [54.5, 26.5],    // Strait of Hormuz focus
                zoom: 5,
@@ -467,7 +467,7 @@
            title: 'Transit to Beira',
            subtitle: 'Gulf of Oman → Mozambique',
            region: 'Arabian Sea to East Africa',
-           dateRange: { start: 'MAY 21, 2025', end: 'JUL 07, 2025' },
+           dateRange: { start: 'MAY 20, 2025', end: 'JUL 08, 2025' },
            camera: {
                center: [21.61, 10],
                zoom: 2.91,
@@ -631,7 +631,7 @@
            title: 'ZHU HAI YUN',
            subtitle: 'China\'s Autonomous Drone Mothership',
            region: 'South China Sea • Spratly Islands',
-           dateRange: { start: 'JUL 28, 2025', end: 'AUG 17, 2025' },
+           dateRange: { start: 'JUL 29, 2025', end: 'AUG 16, 2025' },
            camera: {
                center: [117.258, 10.977],
                zoom: 5.67,
@@ -709,7 +709,7 @@
            title: 'Beihai LNG Delivery',
            subtitle: '7th Sanctioned LNG at Beihai in 2025',
            region: 'Gulf of Tonkin → Beihai, China',
-           dateRange: { start: 'SEP 16, 2025', end: 'OCT 02, 2025' },
+           dateRange: { start: 'SEP 16, 2025', end: 'OCT 01, 2025' },
            camera: {
                center: [110.5, 17.905],  // Gulf of Tonkin area
                zoom: 5.3,
@@ -783,7 +783,7 @@
            title: 'DUNE & STELLAR ORACLE',
           subtitle: 'Iranian Oil Export via Identity Spoofing',
           region: 'Iran to China',
-          dateRange: { start: '23 Jul 2025', end: '15 Nov 2025' },
+          dateRange: { start: '23 Jul 2025', end: '15 Aug 2025' },
            hideChapterInfo: true,
            camera: {
                center: [75.81, 22.04],  // Jask, Iran
@@ -819,7 +819,7 @@
            title: 'STS Transfer Operation',
           subtitle: 'DUNE meets STELLAR ORACLE',
           region: 'South China Sea',
-          dateRange: { start: '15 Aug 2025', end: '26 Sep 2025' },
+          dateRange: { start: '15 Aug 2025', end: '29 Sep 2025' },
            camera: {
                center: [111.95, 4.25],  // STS location
                zoom: 4.55,
